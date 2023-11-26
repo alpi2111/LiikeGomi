@@ -9,7 +9,7 @@ import com.liike.liikegomi.background.database.dao_interfaces.*
 import com.liike.liikegomi.background.database.entities.*
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [
         Direcciones::class,
         Rol::class,
