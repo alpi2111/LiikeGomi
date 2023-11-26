@@ -32,8 +32,8 @@
                 android:id="@+id/il_user"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:hint="@string/user"
+                android:layout_marginTop="10dp"
+                android:hint="@string/user_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -46,7 +46,8 @@
                     android:drawableStart="@drawable/ic_person"
                     android:drawablePadding="10dp"
                     android:drawableTint="@color/light_primary"
-                    android:maxLines="1" />
+                    android:inputType="text"
+                    android:maxLines="2" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
