@@ -1,6 +1,8 @@
 package com.liike.liikegomi.base.ui
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -41,5 +43,23 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar?.configure(onBackPressedDispatcher, canShowBackButton = !isTaskRoot)
         super.onPostCreate(savedInstanceState)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.shoping_cart -> {
+                // OPEN CART ACTIVITY
+                MessageUtils.toast(this, "Shopping cart")
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 }
