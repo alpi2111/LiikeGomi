@@ -1,0 +1,616 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "c9b14942911b12440a03c4aa62dee41b",
+    "entities": [
+      {
+        "tableName": "Direcciones",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`direccion` TEXT NOT NULL, `estado` TEXT NOT NULL, `municipio` TEXT NOT NULL, `colonia` TEXT NOT NULL, `calle` TEXT NOT NULL, `cp` TEXT NOT NULL, `num_exterior` TEXT NOT NULL, `num_interior` TEXT NOT NULL, `telefono` TEXT NOT NULL, `referencias` TEXT NOT NULL, `id_direccion` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "direccion",
+            "columnName": "direccion",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "estado",
+            "columnName": "estado",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "municipio",
+            "columnName": "municipio",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "colonia",
+            "columnName": "colonia",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "calle",
+            "columnName": "calle",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cp",
+            "columnName": "cp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numExterior",
+            "columnName": "num_exterior",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numInterior",
+            "columnName": "num_interior",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "telefono",
+            "columnName": "telefono",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "referencias",
+            "columnName": "referencias",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idDireccion",
+            "columnName": "id_direccion",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id_direccion"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Rol",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tipo` TEXT NOT NULL, `id_rol` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "tipo",
+            "columnName": "tipo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idRol",
+            "columnName": "id_rol",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id_rol"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Categoria",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`categoria` TEXT NOT NULL, `visible` INTEGER NOT NULL, `id_categoria` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "categoria",
+            "columnName": "categoria",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isVisible",
+            "columnName": "visible",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idCategoria",
+            "columnName": "id_categoria",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id_categoria"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Productos",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`nombre_producto` TEXT NOT NULL, `descripcion` TEXT NOT NULL, `precio_producto` REAL NOT NULL, `stocks` INTEGER NOT NULL, `id_cat` INTEGER NOT NULL, `visible` INTEGER NOT NULL, `imagen` BLOB, `id_producto` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`id_cat`) REFERENCES `Categoria`(`id_categoria`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "productName",
+            "columnName": "nombre_producto",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productDescription",
+            "columnName": "descripcion",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productPrice",
+            "columnName": "precio_producto",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productStock",
+            "columnName": "stocks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idCategoria",
+            "columnName": "id_cat",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isVisible",
+            "columnName": "visible",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productImage",
+            "columnName": "imagen",
+            "affinity": "BLOB",
+            "notNull": false
+          },
+          {
+            "fieldPath": "idProduct",
+            "columnName": "id_producto",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id_producto"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Productos_id_cat",
+            "unique": false,
+            "columnNames": [
+              "id_cat"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Productos_id_cat` ON `${TABLE_NAME}` (`id_cat`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Categoria",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "id_cat"
+            ],
+            "referencedColumns": [
+              "id_categoria"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Usuarios",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`nombre` TEXT NOT NULL, `apellido` TEXT NOT NULL, `contra` TEXT NOT NULL, `correo` TEXT NOT NULL, `nombre_usuario` TEXT NOT NULL, `fecha_nacimiento` INTEGER NOT NULL, `id_rol` INTEGER NOT NULL, `activo` INTEGER NOT NULL, `id_usuario` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`id_rol`) REFERENCES `Rol`(`id_rol`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "nombre",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "apellido",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "password",
+            "columnName": "contra",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "correo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userName",
+            "columnName": "nombre_usuario",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "birthDay",
+            "columnName": "fecha_nacimiento",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idRol",
+            "columnName": "id_rol",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isActive",
+            "columnName": "activo",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idUser",
+            "columnName": "id_usuario",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id_usuario"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Usuarios_correo_nombre_usuario",
+            "unique": true,
+            "columnNames": [
+              "correo",
+              "nombre_usuario"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Usuarios_correo_nombre_usuario` ON `${TABLE_NAME}` (`correo`, `nombre_usuario`)"
+          },
+          {
+            "name": "index_Usuarios_id_rol",
+            "unique": false,
+            "columnNames": [
+              "id_rol"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Usuarios_id_rol` ON `${TABLE_NAME}` (`id_rol`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Rol",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "id_rol"
+            ],
+            "referencedColumns": [
+              "id_rol"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Ventas",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id_usuario` INTEGER NOT NULL, `fecha_compra` INTEGER NOT NULL, `total_productos` INTEGER NOT NULL, `total_compra` REAL NOT NULL, `id_venta` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`id_usuario`) REFERENCES `Usuarios`(`id_usuario`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "idUsuario",
+            "columnName": "id_usuario",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fechaCompra",
+            "columnName": "fecha_compra",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalProductos",
+            "columnName": "total_productos",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalCompra",
+            "columnName": "total_compra",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idVenta",
+            "columnName": "id_venta",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id_venta"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Ventas_id_usuario",
+            "unique": false,
+            "columnNames": [
+              "id_usuario"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Ventas_id_usuario` ON `${TABLE_NAME}` (`id_usuario`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Usuarios",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "id_usuario"
+            ],
+            "referencedColumns": [
+              "id_usuario"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "VentasDetalle",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id_productos` INTEGER NOT NULL, `id_ventas` INTEGER NOT NULL, `cantidad` INTEGER NOT NULL, `subtotal` REAL NOT NULL, `descuento` REAL NOT NULL, `id_ventadetalle` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`id_productos`) REFERENCES `Productos`(`id_producto`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`id_ventas`) REFERENCES `Ventas`(`id_venta`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "idProducto",
+            "columnName": "id_productos",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idVenta",
+            "columnName": "id_ventas",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cantidad",
+            "columnName": "cantidad",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subtotal",
+            "columnName": "subtotal",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "descuento",
+            "columnName": "descuento",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idVentaDetalle",
+            "columnName": "id_ventadetalle",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id_ventadetalle"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_VentasDetalle_id_productos",
+            "unique": false,
+            "columnNames": [
+              "id_productos"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_VentasDetalle_id_productos` ON `${TABLE_NAME}` (`id_productos`)"
+          },
+          {
+            "name": "index_VentasDetalle_id_ventas",
+            "unique": false,
+            "columnNames": [
+              "id_ventas"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_VentasDetalle_id_ventas` ON `${TABLE_NAME}` (`id_ventas`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Productos",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "id_productos"
+            ],
+            "referencedColumns": [
+              "id_producto"
+            ]
+          },
+          {
+            "table": "Ventas",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "id_ventas"
+            ],
+            "referencedColumns": [
+              "id_venta"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "CarritoUsuarios",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id_productos` INTEGER NOT NULL, `id_sesion` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`id_productos`) REFERENCES `Productos`(`id_producto`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "idProducto",
+            "columnName": "id_productos",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idSesion",
+            "columnName": "id_sesion",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id_sesion"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_CarritoUsuarios_id_productos",
+            "unique": false,
+            "columnNames": [
+              "id_productos"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_CarritoUsuarios_id_productos` ON `${TABLE_NAME}` (`id_productos`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Productos",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "id_productos"
+            ],
+            "referencedColumns": [
+              "id_producto"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "ClienteDireccion",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id_usuario` INTEGER NOT NULL, `id_direccion` INTEGER NOT NULL, `id_clientedireccion` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`id_usuario`) REFERENCES `Usuarios`(`id_usuario`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`id_direccion`) REFERENCES `Direcciones`(`id_direccion`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "idUsuario",
+            "columnName": "id_usuario",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idDireccion",
+            "columnName": "id_direccion",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idClienteDireccion",
+            "columnName": "id_clientedireccion",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id_clientedireccion"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_ClienteDireccion_id_usuario",
+            "unique": false,
+            "columnNames": [
+              "id_usuario"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ClienteDireccion_id_usuario` ON `${TABLE_NAME}` (`id_usuario`)"
+          },
+          {
+            "name": "index_ClienteDireccion_id_direccion",
+            "unique": false,
+            "columnNames": [
+              "id_direccion"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ClienteDireccion_id_direccion` ON `${TABLE_NAME}` (`id_direccion`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Usuarios",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "id_usuario"
+            ],
+            "referencedColumns": [
+              "id_usuario"
+            ]
+          },
+          {
+            "table": "Direcciones",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "id_direccion"
+            ],
+            "referencedColumns": [
+              "id_direccion"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c9b14942911b12440a03c4aa62dee41b')"
+    ]
+  }
+}
