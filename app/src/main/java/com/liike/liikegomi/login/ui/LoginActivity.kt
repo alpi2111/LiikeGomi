@@ -1,6 +1,8 @@
 package com.liike.liikegomi.login.ui
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityLoginBinding
@@ -8,6 +10,14 @@ import com.liike.liikegomi.login.view_model.LoginViewModel
 import com.liike.liikegomi.login.view_model.LoginViewModelFactory
 
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
+
+    companion object {
+        fun launch(appCompatActivity: AppCompatActivity) {
+            val intent = Intent(appCompatActivity, LoginActivity::class.java)
+            appCompatActivity.startActivity(intent)
+        }
+    }
+
     override val mViewModel: LoginViewModel
         get() = getViewModelFactory(this, LoginViewModelFactory())
 
