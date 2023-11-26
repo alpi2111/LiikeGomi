@@ -9,6 +9,7 @@ import com.liike.liikegomi.databinding.ActivityLoginBinding
 import com.liike.liikegomi.login.view_model.LoginViewModel
 import com.liike.liikegomi.login.view_model.LoginViewModelFactory
 import com.liike.liikegomi.main.ui.MainActivity
+import com.liike.liikegomi.register.ui.RegisterActivity
 
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
@@ -38,6 +39,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
         mBinding.btnLogin.setOnClickListener {
             mViewModel.login(mBinding.etUser.text!!.toString(), mBinding.etPassword.text!!.toString())
         }
+
+        mBinding.btnRegister.setOnClickListener {
+            RegisterActivity.launch(this)
+        }
+
         mBinding.forgotPassword.setOnClickListener {
             MessageUtils.toast(this, "Olvidé contraseña")
         }

@@ -31,6 +31,9 @@
             android:exported="true"
             android:launchMode="singleTop" />
         <activity
+            android:name=".register.ui.RegisterActivity"
+            android:exported="true" />
+        <activity
             android:name=".main.ui.MainActivity"
             android:clearTaskOnLaunch="true"
             android:exported="true"

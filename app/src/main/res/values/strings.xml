@@ -7,4 +7,11 @@
     <string name="login">Ingresar</string>
     <string name="create_account">Crear cuenta</string>
     <string name="o">O</string>
+    <string name="name">Nombre(s)</string>
+    <string name="last_name">Apellido(s)</string>
+    <string name="user_name">Nombre de usuario</string>
+    <string name="email">Correo electrónico</string>
+    <string name="birth_date">Fecha de nacimiento</string>
+    <string name="phone_number">Número de celular</string>
+    <string name="repeat_password">Repetir contraseña</string>
 </resources>
