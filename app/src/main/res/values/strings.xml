@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Liike Gomi</string>
     <string name="shopping_cart">Carrito de compra</string>
+    <string name="user">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="forgot_password">Olvidé mi contraseña</string>
+    <string name="login">Ingresar</string>
+    <string name="create_account">Crear cuenta</string>
+    <string name="o">O</string>
 </resources>

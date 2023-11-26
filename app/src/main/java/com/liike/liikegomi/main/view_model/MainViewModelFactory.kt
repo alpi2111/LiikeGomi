@@ -1,9 +1,10 @@
 package com.liike.liikegomi.main.view_model
 
 import com.liike.liikegomi.base.viewmodel.BaseViewModelFactory
+import com.liike.liikegomi.login.view_model.LoginViewModel
 
-class MainViewModelFactory : BaseViewModelFactory<MainViewModel>() {
-    override fun setViewModel(): MainViewModel {
-        return MainViewModel()
+class MainViewModelFactory : BaseViewModelFactory<LoginViewModel>() {
+    override fun setViewModel(): LoginViewModel {
+        return LoginViewModel()
     }
 }
