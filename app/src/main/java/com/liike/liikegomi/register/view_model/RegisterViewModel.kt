@@ -4,26 +4,36 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.liike.liikegomi.background.database.Dao
+import com.liike.liikegomi.background.database.entities.Usuarios
+import com.liike.liikegomi.background.utils.RandomUtils
 import com.liike.liikegomi.base.viewmodel.BaseViewModel
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class RegisterViewModel: BaseViewModel() {
 
-    private val _wasLogged = MutableLiveData<Boolean>()
-    val mWasLogged: LiveData<Boolean> = _wasLogged
+    fun getUserRol() {
+    }
 
-    fun login(userName: String, password: String) {
+    fun saveUser(user: Usuarios) {
         viewModelScope.launch {
-            progressMessage.value = "Iniciando sesión"
-            val user = Dao.getUserByUserName(userName, password)
-            delay(Random.nextLong(1000, 4000))
-            if (user == null)
-                toastMessage.value = "No se pudo iniciar sesión, verifica tu usuario y contraseña"
-            else
-                _wasLogged.value = true
+            progressMessage.value = "Creando usuario"
+            val userRol = Dao.getInstance().rolDao().getRol()
+            if (userRol == null || userRol < 0) {
+                progressMessage.value = null
+                toastMessage.value = "Rol de usuario inexistente"
+                cancel()
+                ensureActive()
+                return@launch
+            }
+            user.idRol = userRol
+            delay(RandomUtils.getSimulationSeconds())
+            Dao.saveUser(user)
             progressMessage.value = null
+            toastMessage.value = "Cuenta creada"
         }
     }
 }
