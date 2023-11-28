@@ -2,7 +2,9 @@ package com.liike.liikegomi.login.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.liike.liikegomi.background.utils.CryptUtils
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityLoginBinding
@@ -37,7 +39,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
         }
 
         mBinding.btnLogin.setOnClickListener {
-            mViewModel.login(mBinding.etUser.text!!.toString(), mBinding.etPassword.text!!.toString())
+            val toEncrypt = "HolaMundo@gmil.com"
+            val encrypted = CryptUtils.encrypt(toEncrypt)
+            Log.d("encrypted", encrypted)
+            Log.d("decrypted", CryptUtils.decrypt(encrypted))
         }
 
         mBinding.btnRegister.setOnClickListener {
