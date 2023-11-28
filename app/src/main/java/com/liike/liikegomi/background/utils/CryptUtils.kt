@@ -7,8 +7,8 @@ import javax.crypto.spec.SecretKeySpec
 
 object CryptUtils {
     private const val algorithm = "AES/CBC/PKCS5Padding"
-    private val secretKeySpec = SecretKeySpec("L1i43E_60m1.A!(J".toByteArray(), "AES")
-    private val ivParameterSpec = IvParameterSpec(ByteArray(16))
+    private val secretKeySpec by lazy { SecretKeySpec("L1i43E_60m1.A!(J".toByteArray(), "AES") }
+    private val ivParameterSpec by lazy { IvParameterSpec(ByteArray(16)) }
 
     fun encrypt(inputText: String): String {
         val cipher = Cipher.getInstance(algorithm)
