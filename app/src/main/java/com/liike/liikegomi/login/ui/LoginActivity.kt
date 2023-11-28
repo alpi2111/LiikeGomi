@@ -4,6 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.liike.liikegomi.background.database.Dao
+import com.liike.liikegomi.background.database.entities.Rol
+import com.liike.liikegomi.background.database.types.RolType
 import com.liike.liikegomi.background.utils.CryptUtils
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.BaseActivity
@@ -12,6 +16,7 @@ import com.liike.liikegomi.login.view_model.LoginViewModel
 import com.liike.liikegomi.login.view_model.LoginViewModelFactory
 import com.liike.liikegomi.main.ui.MainActivity
 import com.liike.liikegomi.register.ui.RegisterActivity
+import kotlinx.coroutines.launch
 
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
@@ -39,10 +44,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
         }
 
         mBinding.btnLogin.setOnClickListener {
-            val toEncrypt = "HolaMundo@gmil.com"
-            val encrypted = CryptUtils.encrypt(toEncrypt)
-            Log.d("encrypted", encrypted)
-            Log.d("decrypted", CryptUtils.decrypt(encrypted))
+            mViewModel.login(CryptUtils.encrypt(mBinding.etUser.text!!.toString()), CryptUtils.encrypt(mBinding.etPassword.text!!.toString()))
+//            lifecycleScope.launch {
+//                var rol = Rol(RolType.USER)
+//                Dao.getInstance().rolDao().insert(rol)
+//                rol = Rol(RolType.ADMIN)
+//                Dao.getInstance().rolDao().insert(rol)
+//            }
         }
 
         mBinding.btnRegister.setOnClickListener {

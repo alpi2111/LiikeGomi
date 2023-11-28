@@ -26,8 +26,8 @@ data class Usuarios(
     @ColumnInfo("correo") val email: String,
     @ColumnInfo("nombre_usuario") val userName: String,
     @ColumnInfo("fecha_nacimiento") val birthDay: Long,
-    @ColumnInfo("id_rol", index = true) val idRol: Int,
     @ColumnInfo("activo") val isActive: Boolean,
+    @ColumnInfo("id_rol", index = true) var idRol: Int = -1,
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("id_usuario") val idUser: Int = 0,
 )
