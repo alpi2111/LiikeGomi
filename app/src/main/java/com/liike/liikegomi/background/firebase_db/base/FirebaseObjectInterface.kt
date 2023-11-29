@@ -1,0 +1,3 @@
+package com.liike.liikegomi.background.firebase_db.base
+
+interface FirebaseObjectInterface

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "622606207483",
+    "project_id": "liikegomi-497b5",
+    "storage_bucket": "liikegomi-497b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:622606207483:android:9ff45673313e57e997635e",
+        "android_client_info": {
+          "package_name": "com.liike.liikegomi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnBsXa55dQn_js3JNgfPaQmvcvYdnN0YQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

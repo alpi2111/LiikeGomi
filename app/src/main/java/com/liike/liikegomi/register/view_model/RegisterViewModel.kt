@@ -1,17 +1,14 @@
 package com.liike.liikegomi.register.view_model
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.liike.liikegomi.background.database.Dao
-import com.liike.liikegomi.background.database.entities.Usuarios
+import com.liike.liikegomi.background.firebase_db.entities.Usuarios
 import com.liike.liikegomi.background.utils.RandomUtils
 import com.liike.liikegomi.base.viewmodel.BaseViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 class RegisterViewModel: BaseViewModel() {
 

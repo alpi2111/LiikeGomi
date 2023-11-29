@@ -4,21 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
-import com.liike.liikegomi.background.database.entities.Usuarios
-import com.liike.liikegomi.background.database.types.RolType
+import com.liike.liikegomi.background.firebase_db.entities.Usuarios
 import com.liike.liikegomi.background.utils.CryptUtils
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityRegisterBinding
 import com.liike.liikegomi.register.view_model.RegisterViewModel
 import com.liike.liikegomi.register.view_model.RegisterViewModelFactory
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import java.util.Date
-import java.util.logging.SimpleFormatter
 
 class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel>() {
 

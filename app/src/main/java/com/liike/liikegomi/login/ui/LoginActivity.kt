@@ -2,12 +2,7 @@ package com.liike.liikegomi.login.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.liike.liikegomi.background.database.Dao
-import com.liike.liikegomi.background.database.entities.Rol
-import com.liike.liikegomi.background.database.types.RolType
 import com.liike.liikegomi.background.utils.CryptUtils
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.BaseActivity
@@ -16,7 +11,6 @@ import com.liike.liikegomi.login.view_model.LoginViewModel
 import com.liike.liikegomi.login.view_model.LoginViewModelFactory
 import com.liike.liikegomi.main.ui.MainActivity
 import com.liike.liikegomi.register.ui.RegisterActivity
-import kotlinx.coroutines.launch
 
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
