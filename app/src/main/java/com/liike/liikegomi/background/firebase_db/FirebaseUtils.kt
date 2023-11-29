@@ -14,7 +14,7 @@ object FirebaseUtils {
     private val firestore by lazy { FirebaseFirestore.getInstance() }
 
     fun saveUser(activity: AppCompatActivity, user: Usuarios, callback: (Boolean) -> Unit) {
-        firestore.collection(USERS_DB_NAME).add(user).addOnSuccessListener(activity) { reference ->
+        firestore.collection(USERS_DB_NAME).add(user).addOnSuccessListener(activity) {
             callback.invoke(true)
         }.addOnFailureListener {
             callback.invoke(false)
@@ -26,31 +26,37 @@ object FirebaseUtils {
         return firestore.collection(USERS_DB_NAME).whereEqualTo("nombre_usuario", userEncrypted)
     }
 
-    private fun isUserNameAvailable(activity: AppCompatActivity, userName: String, callback: (Boolean) -> Unit) {
+    private fun isUserNameAvailable(activity: AppCompatActivity, userName: String, callback: (Boolean, String?) -> Unit) {
         getUserFromUserNameQuery(userName).get().addOnSuccessListener(activity) { documents ->
-            callback.invoke(documents.isEmpty)
+            if (documents.isEmpty)
+                callback.invoke(true, null)
+            else
+                callback.invoke(false, "Usuario existente")
         }.addOnFailureListener {
-            callback.invoke(false)
+            callback.invoke(false, it.message ?: "Unknown error")
         }
     }
 
-    private fun isEmailAvailable(activity: AppCompatActivity, email: String, callback: (Boolean) -> Unit) {
+    private fun isEmailAvailable(activity: AppCompatActivity, email: String, callback: (Boolean, String?) -> Unit) {
         val emailEncrypted = CryptUtils.encrypt(email.trim())
         firestore.collection(USERS_DB_NAME).whereEqualTo("correo", emailEncrypted).get().addOnSuccessListener(activity) { documents ->
-            callback.invoke(documents.isEmpty)
+            if (documents.isEmpty)
+                callback.invoke(true, null)
+            else
+                callback.invoke(false, "El correo ya ha sido registrado")
         }.addOnFailureListener {
-            callback.invoke(false)
+            callback.invoke(false, it.message ?: "Unknown error")
         }
     }
 
-    fun userCanCreateAnAccount(activity: AppCompatActivity, userName: String, email: String, callback: (Boolean) -> Unit) {
-        isUserNameAvailable(activity, userName) { isUserAvailable ->
+    fun userCanCreateAnAccount(activity: AppCompatActivity, userName: String, email: String, callback: (Boolean, String?) -> Unit) {
+        isUserNameAvailable(activity, userName) { isUserAvailable, message ->
             if (isUserAvailable) {
-                isEmailAvailable(activity, email) { isEmailAvailable ->
-                    callback.invoke(isEmailAvailable)
+                isEmailAvailable(activity, email) { isEmailAvailable, message ->
+                    callback.invoke(isEmailAvailable, message)
                 }
             } else
-                callback.invoke(false)
+                callback.invoke(false, message)
         }
     }
 

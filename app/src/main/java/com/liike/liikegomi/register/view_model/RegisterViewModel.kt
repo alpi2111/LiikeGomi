@@ -22,10 +22,10 @@ class RegisterViewModel: BaseViewModel() {
     fun saveUser(activity: AppCompatActivity, user: Usuarios) {
         viewModelScope.launch {
             progressMessage.value = "Creando usuario"
-            FirebaseUtils.userCanCreateAnAccount(activity, user.userName, user.email) {
-                if (!it) {
+            FirebaseUtils.userCanCreateAnAccount(activity, user.userName, user.email) { creationSuccess, message ->
+                if (!creationSuccess) {
                     progressMessage.value = null
-                    toastMessage.value = "Error, el nombre de usuario/correo ya está siendo usado"
+                    toastMessage.value = message
                     return@userCanCreateAnAccount
                 }
                 FirebaseUtils.saveUser(activity, user) { wasSaved ->
