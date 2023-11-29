@@ -54,26 +54,30 @@ object FirebaseUtils {
         }
     }
 
-    fun loginWithUserNameAndPassword(activity: AppCompatActivity, userName: String, password: String, callback: (Boolean) -> Unit) {
+    fun loginWithUserNameAndPassword(activity: AppCompatActivity, userName: String, password: String, callback: (Boolean, String?) -> Unit) {
         getUserFromUserNameQuery(userName).get().addOnSuccessListener(activity) {
             val documents = it.documents
             if (documents.isEmpty())
-                callback.invoke(false)
+                callback.invoke(false, "Usuario no registrado")
             else {
                 if (documents.size > 1) {
-                    callback.invoke(false)
+                    callback.invoke(false, "Overflow search")
                 } else {
                     val userId = documents.first().id
                     val userCopy = documents.first().toObject<Usuarios>()!!.copy(isLogged = true)
                     if (userCopy.password == CryptUtils.encrypt(password)) {
-                        firestore.collection(USERS_DB_NAME).document(userId).set(userCopy.isLogged, SetOptions.merge())
-                        callback.invoke(true)
+                        if (userCopy.isActive) {
+                            firestore.collection(USERS_DB_NAME).document(userId).set(userCopy, SetOptions.merge())
+                            callback.invoke(true, null)
+                        } else {
+                            callback.invoke(false, "El usuario no está activo, no puedes iniciar sesión")
+                        }
                     } else
-                        callback.invoke(false)
+                        callback.invoke(false, "Contraseña incorrecta")
                 }
             }
         }.addOnFailureListener {
-            callback.invoke(false)
+            callback.invoke(false, it.message ?: "Unknown error")
         }
     }
 

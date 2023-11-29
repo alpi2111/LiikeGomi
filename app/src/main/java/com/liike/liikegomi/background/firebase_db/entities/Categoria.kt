@@ -5,10 +5,10 @@ import com.liike.liikegomi.background.database.types.CategoryType
 import com.liike.liikegomi.background.firebase_db.base.FirebaseObjectInterface
 
 data class Categoria(
-    @PropertyName("categoria")
+    @get:PropertyName("categoria")
     val category: CategoryType,
-    @PropertyName("is_visible")
+    @get:PropertyName("is_visible")
     val isVisible: Boolean,
-    @PropertyName("id_categoria")
+    @get:PropertyName("id_categoria")
     val idCategory: Int = 0,
 ): FirebaseObjectInterface

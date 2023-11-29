@@ -1,7 +1,11 @@
 package com.liike.liikegomi.register.view_model
 
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.liike.liikegomi.background.database.Dao
+import com.liike.liikegomi.background.firebase_db.FirebaseUtils
 import com.liike.liikegomi.background.firebase_db.entities.Usuarios
 import com.liike.liikegomi.background.utils.RandomUtils
 import com.liike.liikegomi.base.viewmodel.BaseViewModel
@@ -12,7 +16,29 @@ import kotlinx.coroutines.launch
 
 class RegisterViewModel: BaseViewModel() {
 
-    fun getUserRol() {
+    private val _wasRegistered: MutableLiveData<Boolean> = MutableLiveData()
+    val mWasRegistered: LiveData<Boolean> = _wasRegistered
+
+    fun saveUser(activity: AppCompatActivity, user: Usuarios) {
+        viewModelScope.launch {
+            progressMessage.value = "Creando usuario"
+            FirebaseUtils.userCanCreateAnAccount(activity, user.userName, user.email) {
+                if (!it) {
+                    progressMessage.value = null
+                    toastMessage.value = "Error, el nombre de usuario/correo ya está siendo usado"
+                    return@userCanCreateAnAccount
+                }
+                FirebaseUtils.saveUser(activity, user) { wasSaved ->
+                    progressMessage.value = null
+                    if (wasSaved) {
+                        toastMessage.value = "Usuario creado"
+                    } else {
+                        toastMessage.value = "Error al crear usuario, intenta nuevamente"
+                    }
+                    _wasRegistered.value = wasSaved
+                }
+            }
+        }
     }
 
     fun saveUser(user: Usuarios) {
@@ -26,9 +52,8 @@ class RegisterViewModel: BaseViewModel() {
                 ensureActive()
                 return@launch
             }
-            user.idRol = userRol
             delay(RandomUtils.getSimulationSeconds())
-            Dao.saveUser(user)
+//            Dao.saveUser(user)
             progressMessage.value = null
             toastMessage.value = "Cuenta creada"
         }

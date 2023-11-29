@@ -35,7 +35,8 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
                 MessageUtils.progress(supportFragmentManager, message)
         }
         mViewModel.mToastMessage.observe(this) { message ->
-            MessageUtils.toast(this, message.toString())
+            if (!message.isNullOrBlank())
+                MessageUtils.toast(this, message.toString())
         }
     }
 

@@ -5,13 +5,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.liike.liikegomi.background.firebase_db.entities.Usuarios
-import com.liike.liikegomi.background.utils.CryptUtils
+import com.liike.liikegomi.background.utils.DateUtils
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityRegisterBinding
 import com.liike.liikegomi.register.view_model.RegisterViewModel
 import com.liike.liikegomi.register.view_model.RegisterViewModelFactory
-import java.util.Calendar
 
 class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel>() {
 
@@ -31,6 +30,12 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mViewModel.mWasRegistered.observe(this) {
+            if (it)
+                finish()
+        }
+
         mBinding.btnCreate.setOnClickListener {
             if (!allFieldsAreFilled()) {
                 MessageUtils.toast(this, "Faltan algunos campos!")
@@ -40,19 +45,16 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
                 MessageUtils.toast(this, "Las contraseñas no coinciden")
                 return@setOnClickListener
             }
-            val calendar = Calendar.getInstance()
             mBinding.run {
                 val user = Usuarios(
                     name = etName.text(),
                     lastName = etLastName.text(),
-                    password = CryptUtils.encrypt(etPassword.text()),
-                    email = CryptUtils.encrypt(etEmail.text()),
-                    userName = CryptUtils.encrypt(etUserName.text()),
-                    birthDay = calendar.time.time,
-                    idRol = 0,
-                    isActive = true
+                    password = etPassword.text(),
+                    email = etEmail.text(),
+                    userName = etUserName.text(),
+                    birthDay = DateUtils.getCurrentTimestampFormatted(),
                 )
-                mViewModel.saveUser(user)
+                mViewModel.saveUser(this@RegisterActivity, user)
             }
         }
     }

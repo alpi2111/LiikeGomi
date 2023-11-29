@@ -3,7 +3,6 @@ package com.liike.liikegomi.login.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.liike.liikegomi.background.utils.CryptUtils
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityLoginBinding
@@ -38,7 +37,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
         }
 
         mBinding.btnLogin.setOnClickListener {
-            mViewModel.login(CryptUtils.encrypt(mBinding.etUser.text!!.toString()), CryptUtils.encrypt(mBinding.etPassword.text!!.toString()))
+            mViewModel.login(this, mBinding.etUser.text!!.toString(), mBinding.etPassword.text!!.toString())
 //            lifecycleScope.launch {
 //                var rol = Rol(RolType.USER)
 //                Dao.getInstance().rolDao().insert(rol)
