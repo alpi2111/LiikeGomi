@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewbinding.ViewBinding
 import com.liike.liikegomi.R
+import com.liike.liikegomi.background.shared_prefs.SharedPrefs
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.components.Toolbar
 import com.liike.liikegomi.base.viewmodel.BaseViewModel
@@ -38,6 +39,8 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
             if (!message.isNullOrBlank())
                 MessageUtils.toast(this, message.toString())
         }
+        if (!SharedPrefs.arePreferencesAvailable)
+            SharedPrefs.initPrefs(this)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
