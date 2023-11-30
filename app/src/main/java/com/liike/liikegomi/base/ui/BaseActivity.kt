@@ -13,6 +13,8 @@ import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.components.Toolbar
 import com.liike.liikegomi.base.viewmodel.BaseViewModel
 import com.liike.liikegomi.base.viewmodel.BaseViewModelFactory
+import com.liike.liikegomi.login.ui.LoginActivity
+import com.liike.liikegomi.register.ui.RegisterActivity
 
 abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatActivity() {
     lateinit var mBinding: VB
@@ -39,8 +41,19 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
             if (!message.isNullOrBlank())
                 MessageUtils.toast(this, message.toString())
         }
+        mViewModel.mCloseSession.observe(this) { forceClosingSession ->
+            if (forceClosingSession) {
+                SharedPrefs.deleteAll()
+                LoginActivity.launch(this)
+                finish()
+            }
+        }
+
         if (!SharedPrefs.arePreferencesAvailable)
             SharedPrefs.initPrefs(this)
+
+        if ((this !is LoginActivity) and (this !is RegisterActivity))
+            mViewModel.listenForLoginOrActivatedUser(this)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

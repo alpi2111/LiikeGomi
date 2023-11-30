@@ -3,6 +3,8 @@ package com.liike.liikegomi.login.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.liike.liikegomi.background.shared_prefs.SharedPreferenceKeys
+import com.liike.liikegomi.background.shared_prefs.SharedPrefs
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityLoginBinding
@@ -32,6 +34,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
         mViewModel.mWasLogged.observe(this) {
             if (it) {
+                SharedPrefs.bool(SharedPreferenceKeys.IS_USER_LOGGED, true)
                 MainActivity.launch(this)
             }
         }

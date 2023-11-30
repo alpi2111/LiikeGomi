@@ -34,4 +34,12 @@ object SharedPrefs {
     fun bool(key: SharedPreferenceKeys): Boolean {
         return preferences.getBoolean(key.value, false)
     }
+
+    fun delete(key: SharedPreferenceKeys) {
+        preferences.edit().remove(key.value).apply()
+    }
+
+    fun deleteAll() {
+        preferences.edit().clear().apply()
+    }
 }

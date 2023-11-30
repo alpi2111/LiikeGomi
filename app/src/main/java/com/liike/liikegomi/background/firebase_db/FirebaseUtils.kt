@@ -1,11 +1,14 @@
 package com.liike.liikegomi.background.firebase_db
 
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObject
 import com.liike.liikegomi.background.firebase_db.entities.Usuarios
+import com.liike.liikegomi.background.shared_prefs.SharedPreferenceKeys
+import com.liike.liikegomi.background.shared_prefs.SharedPrefs
 import com.liike.liikegomi.background.utils.CryptUtils
 
 object FirebaseUtils {
@@ -74,6 +77,7 @@ object FirebaseUtils {
                     if (userCopy.password == CryptUtils.encrypt(password)) {
                         if (userCopy.isActive) {
                             firestore.collection(USERS_DB_NAME).document(userId).set(userCopy, SetOptions.merge())
+                            SharedPrefs.string(SharedPreferenceKeys.USER_ID, userId)
                             callback.invoke(true, null)
                         } else {
                             callback.invoke(false, "El usuario no está activo, no puedes iniciar sesión")
@@ -85,6 +89,13 @@ object FirebaseUtils {
         }.addOnFailureListener {
             callback.invoke(false, it.message ?: "Unknown error")
         }
+    }
+
+    fun getUserDocumentReference(): DocumentReference? {
+        val userId = SharedPrefs.string(SharedPreferenceKeys.USER_ID)
+        if (userId != null)
+            return firestore.collection(USERS_DB_NAME).document(userId)
+        return null
     }
 
 }
