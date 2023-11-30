@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.liike.liikegomi.background.shared_prefs.SharedPreferenceKeys
 import com.liike.liikegomi.background.shared_prefs.SharedPrefs
 import com.liike.liikegomi.background.utils.MessageUtils
+import com.liike.liikegomi.background.utils.TextUtils
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityLoginBinding
 import com.liike.liikegomi.login.view_model.LoginViewModel
@@ -38,6 +39,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 MainActivity.launch(this)
             }
         }
+
+        mBinding.etUser.editableText.filters = TextUtils.noSpacesFilter()
+        mBinding.etPassword.filters = TextUtils.noSpacesFilter()
 
         mBinding.btnLogin.setOnClickListener {
             mViewModel.login(this, mBinding.etUser.text!!.toString(), mBinding.etPassword.text!!.toString())
