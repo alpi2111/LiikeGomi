@@ -38,7 +38,6 @@
             android:exported="true" />
         <activity
             android:name=".main.ui.MainActivity"
-            android:clearTaskOnLaunch="true"
             android:exported="true"
             android:launchMode="singleTop" />
     </application>

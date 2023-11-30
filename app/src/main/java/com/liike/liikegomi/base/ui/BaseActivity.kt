@@ -52,7 +52,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         if (!SharedPrefs.arePreferencesAvailable)
             SharedPrefs.initPrefs(this)
 
-        if ((this !is LoginActivity) and (this !is RegisterActivity))
+        if (!isBoardingActivity())
             mViewModel.listenForLoginOrActivatedUser(this)
     }
 
@@ -63,6 +63,8 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        if (isBoardingActivity())
+            return false
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true
     }
@@ -78,5 +80,9 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
                 super.onOptionsItemSelected(item)
             }
         }
+    }
+
+    private fun isBoardingActivity(): Boolean {
+        return (this is LoginActivity) or (this is RegisterActivity)
     }
 }

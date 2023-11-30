@@ -13,6 +13,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     companion object {
         fun launch(appCompatActivity: AppCompatActivity) {
             val intent = Intent(appCompatActivity, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             appCompatActivity.startActivity(intent)
         }
     }
@@ -24,8 +25,4 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         return ActivityMainBinding.inflate(layoutInflater)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        mViewModel.template()
-    }
 }
