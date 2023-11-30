@@ -55,8 +55,8 @@ object FirebaseUtils {
     fun userCanCreateAnAccount(activity: AppCompatActivity, userName: String, email: String, callback: (Boolean, String?) -> Unit) {
         isUserNameAvailable(activity, userName) { isUserAvailable, message ->
             if (isUserAvailable) {
-                isEmailAvailable(activity, email) { isEmailAvailable, message ->
-                    callback.invoke(isEmailAvailable, message)
+                isEmailAvailable(activity, email) { isEmailAvailable, emailAvailableMessage ->
+                    callback.invoke(isEmailAvailable, emailAvailableMessage)
                 }
             } else
                 callback.invoke(false, message)
