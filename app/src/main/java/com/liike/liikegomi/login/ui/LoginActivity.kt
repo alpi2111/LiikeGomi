@@ -9,6 +9,7 @@ import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.background.utils.TextUtils
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityLoginBinding
+import com.liike.liikegomi.isValid
 import com.liike.liikegomi.login.view_model.LoginViewModel
 import com.liike.liikegomi.login.view_model.LoginViewModelFactory
 import com.liike.liikegomi.main.ui.MainActivity
@@ -44,7 +45,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
         mBinding.etPassword.filters = TextUtils.noSpacesFilter()
 
         mBinding.btnLogin.setOnClickListener {
-            mViewModel.login(this, mBinding.etUser.text!!.toString(), mBinding.etPassword.text!!.toString())
+            if (isFormValid())
+                mViewModel.login(this, mBinding.etUser.text!!.toString(), mBinding.etPassword.text!!.toString())
+            else
+                MessageUtils.toast(this, "Faltan algunos campos")
 //            lifecycleScope.launch {
 //                var rol = Rol(RolType.USER)
 //                Dao.getInstance().rolDao().insert(rol)
@@ -59,6 +63,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
         mBinding.forgotPassword.setOnClickListener {
             MessageUtils.toast(this, "Olvidé contraseña")
+        }
+    }
+
+    private fun isFormValid(): Boolean {
+        mBinding.run {
+            return etUser.isValid(ilUser, "El usuario no puede estar vacío") and
+                    etPassword.isValid(ilPassword, "La contraseña no puede estar vacía")
         }
     }
 }
