@@ -3,7 +3,6 @@ package com.liike.liikegomi.background.utils
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
-import android.util.Log
 import com.google.android.material.textfield.TextInputLayout
 
 object TextUtils {
@@ -27,6 +26,18 @@ object TextUtils {
                 }
             }
         }
+    }
+
+    fun onlyNumbersFilter(): Array<InputFilter> {
+        val filter = InputFilter { source, start, end, _, _, _ ->
+            for (i in start until end) {
+                if (Character.isDigit(source[i])) {
+                    return@InputFilter source[i].toString()
+                }
+            }
+            ""
+        }
+        return arrayOf(filter)
     }
 
 }

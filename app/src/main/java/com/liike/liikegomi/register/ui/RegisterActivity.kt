@@ -2,11 +2,14 @@ package com.liike.liikegomi.register.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputFilter
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.liike.liikegomi.background.firebase_db.entities.Usuarios
+import com.liike.liikegomi.background.utils.ActivityUtils
 import com.liike.liikegomi.background.utils.DateUtils
 import com.liike.liikegomi.background.utils.MessageUtils
+import com.liike.liikegomi.background.utils.TextUtils
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityRegisterBinding
 import com.liike.liikegomi.register.view_model.RegisterViewModel
@@ -57,6 +60,22 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
                 mViewModel.saveUser(this@RegisterActivity, user)
             }
         }
+
+        mBinding.run {
+            etUserName.filters = TextUtils.noSpacesFilter()
+            etEmail.filters = TextUtils.noSpacesFilter()
+            etBirthDate.filters = TextUtils.noSpacesFilter()
+            etNumber.filters = TextUtils.noSpacesFilter() + TextUtils.onlyNumbersFilter().plus(InputFilter.LengthFilter(10))
+            etPassword.filters = TextUtils.noSpacesFilter()
+            etPasswordRepeated.filters = TextUtils.noSpacesFilter()
+
+            ActivityUtils.configureEditTextForDatePicker(this@RegisterActivity, etBirthDate, maxDate = DateUtils.getCurrentDate().time)
+        }
+    }
+
+    override fun onDestroy() {
+        ActivityUtils.resetDatePickerDialogVisibility()
+        super.onDestroy()
     }
 
     private fun allFieldsAreFilled(): Boolean {
