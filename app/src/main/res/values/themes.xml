@@ -5,6 +5,14 @@
          <item name="colorPrimary">@color/light_primary</item>
          <item name="colorSecondary">@color/light_secondary</item>
          <item name="colorContainer">@color/background_gray</item>
+         <item name="colorOnPrimary">@color/light_secondary_semi_transparent</item>
+        <item name="materialButtonStyle">@style/ButtonsStyle</item>
+
+        <!-- Navigation Drawer -->
+        <item name="colorNavigationItem">?attr/colorPrimary</item>
+        <item name="colorNavigationItemSelected">@color/white</item>
+        <item name="drawableNavigationItemBackground">@drawable/menu_background_color_state</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
     <style name="Theme.LiikeGomi" parent="Base.Theme.LiikeGomi" />

@@ -8,14 +8,18 @@ import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.liike.liikegomi.R
 import com.liike.liikegomi.databinding.LayoutToolbarBinding
+import com.liike.liikegomi.main.ui.MainActivity
 
 class Toolbar @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : Toolbar(context, attrs) {
 
     private val mActivity: AppCompatActivity? by lazy { this.context.getActivity() }
     private var mBinding: LayoutToolbarBinding
     private var mOnBackPressedDispatcher: OnBackPressedDispatcher? = null
+    private var mDrawerLayout: DrawerLayout? = null
     private var mTitle: String
 
     init {
@@ -45,7 +49,10 @@ class Toolbar @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             }
         }
         mBinding.toolbarTitle.setNavigationOnClickListener {
-            mOnBackPressedDispatcher?.onBackPressed()
+            if (it.context !is MainActivity)
+                mOnBackPressedDispatcher?.onBackPressed()
+            else
+                mDrawerLayout?.openDrawer(GravityCompat.START)
         }
     }
 
@@ -57,5 +64,10 @@ class Toolbar @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             is ContextWrapper -> this.baseContext as AppCompatActivity
             else -> null
         }
+    }
+
+    fun configureDrawer(drawerLayout: DrawerLayout) {
+        mDrawerLayout = drawerLayout
+        mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 }
