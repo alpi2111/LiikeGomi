@@ -81,6 +81,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
             when (menuItem.itemId) {
                 // TODO: ADD OTHER MENU ITEMS
                 R.id.nav_home -> launchActivityMenu(MainActivity::class) { MainActivity.launch(this) }
+                R.id.nav_close_session -> mViewModel.closeSession()
             }
             true
         }

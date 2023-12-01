@@ -98,4 +98,31 @@ object FirebaseUtils {
         return null
     }
 
+    fun closeCurrentSession(callback: (Boolean, String?) -> Unit) {
+        val userId = getUserDocumentReference() ?: run {
+            callback.invoke(false, "La sesión no pudo ser cerrada, intenta nuevamente")
+            return
+        }
+        userId.get().addOnSuccessListener {
+            val user = try {
+                it.toObject<Usuarios>()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+            user.let { usr ->
+                if (usr != null)
+                    firestore.collection(USERS_DB_NAME).document(userId.id).set(usr.copy(isLogged = false), SetOptions.merge()).addOnSuccessListener {
+                        callback.invoke(true, "Sesión cerrada")
+                    }.addOnFailureListener {
+                        callback.invoke(false, it.message ?: "Save user unknown error")
+                    }
+                else
+                    callback.invoke(false, "Error en el usuario")
+            }
+        }.addOnFailureListener {
+            callback.invoke(false, it.message ?: "Unknown error")
+        }
+    }
+
 }

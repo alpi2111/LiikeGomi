@@ -41,6 +41,15 @@ abstract class BaseViewModel: ViewModel() {
         }
     }
 
+    fun closeSession() {
+        progressMessage.value = "Cerrando sesión"
+        FirebaseUtils.closeCurrentSession { sessionClosed, message ->
+            toastMessage.value = message
+            progressMessage.value = null
+            _closeSession.value = sessionClosed
+        }
+    }
+
 //    fun getDao(): AppDatabase {
 //        return Dao.getInstance()
 //    }
