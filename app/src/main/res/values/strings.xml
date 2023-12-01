@@ -14,4 +14,5 @@
     <string name="birth_date">Fecha de nacimiento</string>
     <string name="phone_number">Número de celular</string>
     <string name="repeat_password">Repetir contraseña</string>
+    <string name="password_criteria">Debe contener al menos: \n- 8 Caracteres \n- Una mayúscula\n- Una minúscula\n- Un número\n- Un símbolo: <b><i>.-_*!</i></b></string>
 </resources>

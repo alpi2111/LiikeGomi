@@ -14,3 +14,8 @@ fun TextInputEditText.isValid(parent: TextInputLayout, errorMessage: String): Bo
     return true
 }
 
+fun TextInputEditText.text(): String {
+    return text?.toString() ?: throw RuntimeException("The text you are requesting is not validated, please consider using isValid(parent, errorMessage) before trying to use its value")
+}
+
+

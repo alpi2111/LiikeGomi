@@ -186,6 +186,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:hint="@string/password"
+                        app:counterEnabled="true"
+                        app:errorIconDrawable="@null"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/il_number"
@@ -203,6 +205,16 @@
                             android:maxLines="2" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <TextView
+                        android:id="@+id/password_criteria"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/password_criteria"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/il_password" />
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/il_password_repeated"
                         android:layout_width="0dp"
@@ -210,10 +222,12 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="40dp"
                         android:hint="@string/repeat_password"
+                        app:counterEnabled="true"
+                        app:errorIconDrawable="@null"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/il_password"
+                        app:layout_constraintTop_toBottomOf="@id/password_criteria"
                         app:passwordToggleEnabled="true"
                         app:passwordToggleTint="@color/light_primary">
 

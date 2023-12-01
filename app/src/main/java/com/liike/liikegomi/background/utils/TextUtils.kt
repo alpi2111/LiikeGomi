@@ -8,6 +8,8 @@ import com.google.android.material.textfield.TextInputLayout
 object TextUtils {
 
     private val spacesRegex by lazy { "\\s*".toRegex() }
+    private val passwordRegex by lazy { Regex("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[.\\-_*!]).{8,}$") }
+    private val emailRegex by lazy { Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\$") }
 
     fun noSpacesFilter(): Array<InputFilter> {
         val filter = InputFilter { source, _, _, _, _, _ ->
@@ -38,6 +40,14 @@ object TextUtils {
             ""
         }
         return arrayOf(filter)
+    }
+
+    fun isPasswordValid(password: String): Boolean {
+        return password.matches(passwordRegex)
+    }
+
+    fun isEmailValid(email: String): Boolean {
+        return email.matches(emailRegex)
     }
 
 }
