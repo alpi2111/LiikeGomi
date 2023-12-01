@@ -78,6 +78,10 @@ object FirebaseUtils {
                         if (userCopy.isActive) {
                             firestore.collection(USERS_DB_NAME).document(userId).set(userCopy, SetOptions.merge())
                             SharedPrefs.string(SharedPreferenceKeys.USER_ID, userId)
+                            SharedPrefs.string(SharedPreferenceKeys.NAME_OF_USER, userCopy.name)
+                            SharedPrefs.string(SharedPreferenceKeys.LAST_NAME_USER, userCopy.lastName)
+                            SharedPrefs.string(SharedPreferenceKeys.EMAIL_USER, userCopy.email)
+                            SharedPrefs.string(SharedPreferenceKeys.PHONE_USER, userCopy.phoneNumber)
                             callback.invoke(true, null)
                         } else {
                             callback.invoke(false, "El usuario no está activo, no puedes iniciar sesión")

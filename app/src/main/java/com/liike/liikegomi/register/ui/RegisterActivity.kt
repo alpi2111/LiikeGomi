@@ -59,6 +59,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
                     email = etEmail.text(),
                     userName = etUserName.text(),
                     birthDay = DateUtils.getCurrentTimestampFormatted(),
+                    phoneNumber = etNumber.text()
                 )
                 mViewModel.saveUser(this@RegisterActivity, user)
             }

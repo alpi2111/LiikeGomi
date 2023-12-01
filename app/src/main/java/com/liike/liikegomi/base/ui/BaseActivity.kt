@@ -13,6 +13,7 @@ import com.google.android.material.navigation.NavigationView
 import com.liike.liikegomi.R
 import com.liike.liikegomi.background.shared_prefs.SharedPrefs
 import com.liike.liikegomi.background.utils.MessageUtils
+import com.liike.liikegomi.base.ui.components.MainNavHeaderView
 import com.liike.liikegomi.base.ui.components.Toolbar
 import com.liike.liikegomi.base.viewmodel.BaseViewModel
 import com.liike.liikegomi.base.viewmodel.BaseViewModelFactory
@@ -68,6 +69,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar?.configure(onBackPressedDispatcher, canShowBackButton = !isTaskRoot)
         mDrawer = findViewById(R.id.drawer)
+
         mDrawer.let { drawer ->
             if (drawer != null) {
                 mDrawerToggle = ActionBarDrawerToggle(this, drawer, R.string.open, R.string.close)
@@ -77,6 +79,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
             }
         }
         val navView = findViewById<NavigationView>(R.id.navigation_view)
+        navView?.addHeaderView(MainNavHeaderView(this))
         navView?.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 // TODO: ADD OTHER MENU ITEMS

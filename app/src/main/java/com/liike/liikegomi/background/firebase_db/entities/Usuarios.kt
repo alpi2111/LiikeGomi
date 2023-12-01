@@ -25,6 +25,9 @@ data class Usuarios(
     @get:PropertyName("fecha_nacimiento")
     @set:PropertyName("fecha_nacimiento")
     var birthDay: Timestamp,
+    @get:PropertyName("numero_telefonico")
+    @set:PropertyName("numero_telefonico")
+    var phoneNumber: String,
     @get:PropertyName("activo")
     @set:PropertyName("activo")
     var isActive: Boolean = true,
@@ -41,5 +44,5 @@ data class Usuarios(
     @get:PropertyName("rol")
     @set:PropertyName("rol")
     var rol: Map<String, String> = mapOf("type" to rolType.value)
-    constructor(): this("", "", "", "", "", Timestamp.now(), false, null, false)
+    constructor() : this("", "", "", "", "", Timestamp.now(), "", false, null, false)
 }
