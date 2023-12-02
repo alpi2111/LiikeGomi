@@ -3,8 +3,10 @@ package com.liike.liikegomi.main.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.tabs.TabLayoutMediator
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityMainBinding
+import com.liike.liikegomi.main.ui.adapters.TestCollectionAdapter
 import com.liike.liikegomi.main.view_model.MainViewModel
 import com.liike.liikegomi.main.view_model.MainViewModelFactory
 
@@ -23,6 +25,15 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     override fun inflate(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val adapter = TestCollectionAdapter(supportFragmentManager, lifecycle)
+        mBinding.viewPagerMain.adapter = adapter
+        TabLayoutMediator(mBinding.tabLayoutMain, mBinding.viewPagerMain) { tab, pos ->
+            tab.text = "Page ${pos + 1}"
+        }.attach()
     }
 
 }

@@ -23,4 +23,6 @@
     <string name="profile">Perfil</string>
     <string name="open">Abrir</string>
     <string name="close">Cerrar</string>
+    <string name="price_">Precio:</string>
+    <string name="add_to_cart">Agregar al carrito</string>
 </resources>
