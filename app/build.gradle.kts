@@ -79,8 +79,8 @@ dependencies {
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
     implementation("com.google.firebase:firebase-firestore-ktx")
-    // Material
-    implementation("com.google.android.material:material:1.10.0")
+    // ViewPager2
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
