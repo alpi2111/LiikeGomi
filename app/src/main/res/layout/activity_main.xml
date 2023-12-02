@@ -28,7 +28,7 @@
             app:tabMode="scrollable"
             app:tabSelectedTextColor="@color/white"
             app:tabTextColor="#CC342E33"
-            tools:backgroundTint="?attr/colorPrimary" />
+            android:backgroundTint="?attr/colorPrimary" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager_main"

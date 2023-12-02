@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObject
+import com.liike.liikegomi.background.firebase_db.entities.Categoria
 import com.liike.liikegomi.background.firebase_db.entities.Productos
 import com.liike.liikegomi.background.firebase_db.entities.Usuarios
 import com.liike.liikegomi.background.shared_prefs.SharedPreferenceKeys
@@ -16,6 +17,7 @@ object FirebaseUtils {
 
     private const val USERS_DB_NAME = "usuarios"
     private const val PRODUCTS_DB_NAME = "productos"
+    private const val CATEGORIES_DB_NAME = "categorias"
     private val firestore by lazy { FirebaseFirestore.getInstance() }
 
     fun saveUser(activity: AppCompatActivity, user: Usuarios, callback: (Boolean) -> Unit) {
@@ -136,6 +138,22 @@ object FirebaseUtils {
             callback.invoke(true, null)
         }.addOnFailureListener {
             callback.invoke(false, it.message ?: "Unknown error")
+        }
+    }
+
+    fun getProductCategories(activity: AppCompatActivity, callback: (Boolean, List<Categoria>?, String?) -> Unit) {
+        firestore.collection(CATEGORIES_DB_NAME).addSnapshotListener(activity) { snapshot, exception ->
+            if (exception != null || snapshot == null) {
+                callback.invoke(false, null, exception?.message ?: "Unknown error")
+            } else {
+                val categoryList = mutableListOf<Categoria>()
+                snapshot.documents.forEach { document ->
+                    val category = document.toObject(Categoria::class.java) ?: return@forEach
+                    if (category.isVisible)
+                        categoryList.add(category)
+                }
+                callback.invoke(true, categoryList.sortedBy { it.idCategory }, null)
+            }
         }
     }
 

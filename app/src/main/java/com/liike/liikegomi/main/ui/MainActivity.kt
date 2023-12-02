@@ -12,6 +12,8 @@ import com.liike.liikegomi.main.view_model.MainViewModelFactory
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
+//    private lateinit var mCategoriesAdapter: Prod
+
     companion object {
         fun launch(appCompatActivity: AppCompatActivity) {
             val intent = Intent(appCompatActivity, MainActivity::class.java)
@@ -29,11 +31,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val adapter = TestCollectionAdapter(supportFragmentManager, lifecycle)
-        mBinding.viewPagerMain.adapter = adapter
-        TabLayoutMediator(mBinding.tabLayoutMain, mBinding.viewPagerMain) { tab, pos ->
-            tab.text = "Page ${pos + 1}"
-        }.attach()
+
+        mViewModel.mCategoriesList.observe(this) {
+            val adapter = TestCollectionAdapter(it.size, supportFragmentManager, lifecycle)
+            mBinding.viewPagerMain.adapter = adapter
+            TabLayoutMediator(mBinding.tabLayoutMain, mBinding.viewPagerMain) { tab, pos ->
+                tab.text = it[pos].category
+            }.attach()
+        }
+
+        mViewModel.getCategories(this)
     }
 
 }
