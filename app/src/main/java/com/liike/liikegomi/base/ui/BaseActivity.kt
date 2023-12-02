@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.navigation.NavigationView
 import com.liike.liikegomi.R
+import com.liike.liikegomi.add_product.ui.AddProductActivity
 import com.liike.liikegomi.background.shared_prefs.SharedPrefs
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.components.MainNavHeaderView
@@ -85,6 +86,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
                 // TODO: ADD OTHER MENU ITEMS
                 R.id.nav_home -> launchActivityMenu(MainActivity::class) { MainActivity.launch(this) }
                 R.id.nav_close_session -> mViewModel.closeSession()
+                R.id.nav_my_purchases -> launchActivityMenu(AddProductActivity::class) { AddProductActivity.launch(this) }
             }
             true
         }

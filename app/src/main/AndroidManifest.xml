@@ -40,6 +40,9 @@
             android:name=".main.ui.MainActivity"
             android:exported="true"
             android:launchMode="singleTop" />
+        <activity
+            android:name=".add_product.ui.AddProductActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

@@ -25,4 +25,13 @@
     <string name="close">Cerrar</string>
     <string name="price_">Precio:</string>
     <string name="add_to_cart">Agregar al carrito</string>
+    <string name="add_new_product">Agregar nuevo producto</string>
+    <string name="product_name">Nombre del producto</string>
+    <string name="description">Descripción</string>
+    <string name="price">Precio</string>
+    <string name="stock_quantity">Cantidad en stock</string>
+    <string name="category">Categoría</string>
+    <string name="take_photo">Tomar fotografía</string>
+    <string name="select_from_gallery">Seleccionar de galería</string>
+    <string name="add_photo">Agregar fotografía</string>
 </resources>
