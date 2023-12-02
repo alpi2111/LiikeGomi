@@ -151,7 +151,10 @@ class SelectImageBottomSheet private constructor(private val callback: ImageSele
                     callback.onImageSelected(null)
                 } else {
                     val file = File(path)
-                    callback.onImageSelected(file.readBytes())
+                    val fileBytes = file.readBytes()
+                    val bitmap = BitmapFactory.decodeByteArray(fileBytes, 0, fileBytes.size)
+                    val bytesCompressed = compressTo1Mb(bitmap)
+                    callback.onImageSelected(bytesCompressed)
                 }
                 dismiss()
             }
@@ -176,10 +179,11 @@ class SelectImageBottomSheet private constructor(private val callback: ImageSele
         try {
             val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             val rotatedBitmap = ImageUtils.rotateImage(bitmap, fileTemp.absolutePath)
-            val stream = ByteArrayOutputStream()
-            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
-            val bytes = stream.toByteArray()
-            rotatedBitmap.recycle()
+            val bytes = compressTo1Mb(rotatedBitmap)
+//            val stream = ByteArrayOutputStream()
+//            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, stream)
+//            val bytes = stream.toByteArray()
+//            rotatedBitmap.recycle()
             callback.onImageSelected(bytes)
             dismiss()
         } catch (e: Exception) {
@@ -197,5 +201,18 @@ class SelectImageBottomSheet private constructor(private val callback: ImageSele
         val storageDir = requireActivity().cacheDir
         mFileTemp = File.createTempFile(imageTempName, ".jpg", storageDir)
         return mFileTemp
+    }
+
+    private fun compressTo1Mb(bitmap: Bitmap): ByteArray {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
+        val bytes = stream.toByteArray()
+        bitmap.recycle()
+        // 1048487
+        if (bytes.size > 1048487) {
+            val newBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            return compressTo1Mb(newBitmap)
+        }
+        return bytes
     }
 }

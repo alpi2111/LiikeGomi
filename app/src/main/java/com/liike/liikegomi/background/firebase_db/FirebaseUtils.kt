@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObject
+import com.liike.liikegomi.background.firebase_db.entities.Productos
 import com.liike.liikegomi.background.firebase_db.entities.Usuarios
 import com.liike.liikegomi.background.shared_prefs.SharedPreferenceKeys
 import com.liike.liikegomi.background.shared_prefs.SharedPrefs
@@ -14,6 +15,7 @@ import com.liike.liikegomi.background.utils.CryptUtils
 object FirebaseUtils {
 
     private const val USERS_DB_NAME = "usuarios"
+    private const val PRODUCTS_DB_NAME = "productos"
     private val firestore by lazy { FirebaseFirestore.getInstance() }
 
     fun saveUser(activity: AppCompatActivity, user: Usuarios, callback: (Boolean) -> Unit) {
@@ -124,6 +126,14 @@ object FirebaseUtils {
                 else
                     callback.invoke(false, "Error en el usuario")
             }
+        }.addOnFailureListener {
+            callback.invoke(false, it.message ?: "Unknown error")
+        }
+    }
+
+    fun addProduct(product: Productos, callback: (Boolean, String?) -> Unit) {
+        firestore.collection(PRODUCTS_DB_NAME).add(product).addOnSuccessListener {
+            callback.invoke(true, null)
         }.addOnFailureListener {
             callback.invoke(false, it.message ?: "Unknown error")
         }

@@ -65,7 +65,8 @@ class ItemProductAdapter : RecyclerView.Adapter<ItemProductAdapter.ViewHolder>()
                 productTitle.text = product.productName
                 productDescription.text = product.productDescription
                 price.text = product.productPrice.toString()
-                val imageBitmap = BitmapFactory.decodeByteArray(product.productImage, 0, product.productImage?.size ?: 0)
+                val imageBytes = product.productImage!!.toBytes()
+                val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 productImage.setImageBitmap(imageBitmap)
             }
         }
