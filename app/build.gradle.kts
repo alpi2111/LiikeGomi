@@ -81,6 +81,8 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
     // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.0.0")
+    //ExifInterface
+    implementation("androidx.exifinterface:exifinterface:1.3.6")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

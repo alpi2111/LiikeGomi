@@ -2,7 +2,10 @@ package com.liike.liikegomi.image_picker.ui
 
 import android.app.Activity
 import android.content.ContentUris
+import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.DocumentsContract
@@ -11,14 +14,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.liike.liikegomi.background.utils.ImageUtils
+import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.databinding.BottomSheetSelectImageBinding
 import com.liike.liikegomi.image_picker.background.interfaces.ImageSelectionCallback
+import java.io.ByteArrayOutputStream
 import java.io.File
 
-class SelectImageBottomSheet private constructor(val callback: ImageSelectionCallback) : BottomSheetDialogFragment() {
+class SelectImageBottomSheet private constructor(private val callback: ImageSelectionCallback) : BottomSheetDialogFragment() {
     companion object {
         private const val TAG = "SelectImageBottomSheet"
         fun show(fragmentManager: FragmentManager, callback: ImageSelectionCallback) {
@@ -39,55 +47,26 @@ class SelectImageBottomSheet private constructor(val callback: ImageSelectionCal
         }
     }
 
+    private var mFileTemp: File? = null
     private lateinit var mBinding: BottomSheetSelectImageBinding
     private val startGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        val data = result.data
-        if (result.resultCode != Activity.RESULT_OK || data == null) {
-            callback.onImageSelected(null)
-            dismiss()
-            return@registerForActivityResult
-        }
-
-        val uri: Uri? = data.data
-        var filePath: String? = null
-        if (DocumentsContract.isDocumentUri(this.requireContext(), uri)) {
-            val docId = DocumentsContract.getDocumentId(uri)
-            if ("com.android.providers.media.documents" == uri?.authority) {
-                val id = docId.split(":")[1]
-                val selection = MediaStore.Images.Media._ID + "=" + id
-                filePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection)
-            } else if ("com.android.providers.downloads.documents" == uri?.authority) {
-                val contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(docId))
-                filePath = getImagePath(contentUri, null)
-            }
-        } else if ("content".equals(uri?.scheme, ignoreCase = true)) {
-            filePath = getImagePath(uri, null)
-        } else if ("file".equals(uri?.scheme, ignoreCase = true)) {
-            filePath = uri?.path
-        }
-        filePath.let { path ->
-            if (path.isNullOrBlank()) {
-                callback.onImageSelected(null)
-                dismiss()
-            } else {
-                val file = File(path)
-                callback.onImageSelected(file.readBytes())
-                dismiss()
-            }
-        }
+        evaluateIntentDataForGettingGalleryImage(result)
     }
 
+    private val startCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        evaluateIntentDataForTakingPhoto(result)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = BottomSheetSelectImageBinding.inflate(inflater, null, false)
-
-        mBinding.btnTakePhoto.setOnClickListener {
-
-        }
-
+        mBinding.btnTakePhoto.setOnClickListener { dispatchTakePictureIntent() }
         mBinding.btnSelectPhoto.setOnClickListener { openGallery() }
-
         return mBinding.root
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        mFileTemp?.delete()
+        super.onDismiss(dialog)
     }
 
     private fun openGallery() {
@@ -115,5 +94,108 @@ class SelectImageBottomSheet private constructor(val callback: ImageSelectionCal
         }
     }
 
+    private fun dispatchTakePictureIntent() {
+        try {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val tempFile = createTempImageFile()
+            if (tempFile != null) {
+                val imageUri = FileProvider.getUriForFile(
+                    requireContext(),
+                    requireContext().applicationContext.packageName.plus(".provider"),
+                    tempFile
+                )
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+                startCamera.launch(intent)
+            } else {
+                MessageUtils.toast(requireContext(), "No se pudo iniciar la cámara")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            MessageUtils.toast(requireContext(), "Error not catch, ${e.message}")
+            dismiss()
+        }
+    }
 
+    private fun evaluateIntentDataForGettingGalleryImage(result: ActivityResult) {
+        val data = result.data
+        if (result.resultCode != Activity.RESULT_OK || data == null) {
+            callback.onImageSelected(null)
+            dismiss()
+            return
+        }
+
+        val uri: Uri? = data.data
+        var filePath: String? = null
+        try {
+            if (DocumentsContract.isDocumentUri(this.requireContext(), uri)) {
+                val docId = DocumentsContract.getDocumentId(uri)
+                if ("com.android.providers.media.documents" == uri?.authority) {
+                    val id = docId.split(":")[1]
+                    val selection = MediaStore.Images.Media._ID + "=" + id
+                    filePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection)
+                } else if ("com.android.providers.downloads.documents" == uri?.authority) {
+                    val contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(docId))
+                    filePath = getImagePath(contentUri, null)
+                }
+            } else if ("content".equals(uri?.scheme, ignoreCase = true)) {
+                filePath = getImagePath(uri, null)
+            } else if ("file".equals(uri?.scheme, ignoreCase = true)) {
+                filePath = uri?.path
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            MessageUtils.toast(requireContext(), "Error not catch, due to ${e.message}")
+        } finally {
+            filePath.let { path ->
+                if (path.isNullOrBlank()) {
+                    callback.onImageSelected(null)
+                } else {
+                    val file = File(path)
+                    callback.onImageSelected(file.readBytes())
+                }
+                dismiss()
+            }
+        }
+    }
+
+    private fun evaluateIntentDataForTakingPhoto(result: ActivityResult) {
+        val fileTemp = mFileTemp
+        if (result.resultCode != Activity.RESULT_OK || fileTemp == null) {
+            callback.onImageSelected(null)
+            dismiss()
+            return
+        }
+
+        val imageBytes = fileTemp.readBytes()
+        if (!fileTemp.exists() || imageBytes.isEmpty()) {
+            callback.onImageSelected(null)
+            dismiss()
+            return
+        }
+
+        try {
+            val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            val rotatedBitmap = ImageUtils.rotateImage(bitmap, fileTemp.absolutePath)
+            val stream = ByteArrayOutputStream()
+            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
+            val bytes = stream.toByteArray()
+            rotatedBitmap.recycle()
+            callback.onImageSelected(bytes)
+            dismiss()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            MessageUtils.toast(requireContext(), "Error not catch camera, ${e.message}")
+        } finally {
+            if (this.isVisible)
+                dismiss()
+        }
+    }
+
+    private fun createTempImageFile(): File? {
+        val timestampMillis = System.currentTimeMillis()
+        val imageTempName = "Temp_$timestampMillis"
+        val storageDir = requireActivity().cacheDir
+        mFileTemp = File.createTempFile(imageTempName, ".jpg", storageDir)
+        return mFileTemp
+    }
 }
