@@ -22,7 +22,7 @@ class Productos(
     var idCategoria: Int,
     @get:PropertyName("id_producto")
     @set:PropertyName("id_producto")
-    var productId: String,
+    var productId: Int,
     @get:PropertyName("visible")
     @set:PropertyName("visible")
     var isVisible: Boolean = true,
@@ -30,5 +30,5 @@ class Productos(
     @set:PropertyName("imagen")
     var productImage: Blob? = null,
 ): FirebaseObjectInterface {
-    constructor(): this("", "", 0.0, 0, 0, "")
+    constructor(): this("", "", 0.0, 0, 0, 0)
 }

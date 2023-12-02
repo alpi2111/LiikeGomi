@@ -76,7 +76,7 @@ class AddProductActivity : BaseActivity<ActivityAddProductBinding, AddProductVie
                 product.idCategoria = 1
                 product.isVisible = true
                 product.productDescription = etProductDescription.text()
-                product.productId = "1"
+                product.productId = 1
                 product.productStock = etStock.text().toInt()
                 product.productPrice = etPrice.text().toDouble()
                 product.productImage = Blob.fromBytes(mImage!!)
