@@ -6,7 +6,7 @@ import com.google.firebase.firestore.PropertyName
 import com.liike.liikegomi.background.database.types.RolType
 import com.liike.liikegomi.background.firebase_db.base.FirebaseObjectInterface
 
-data class Usuarios(
+class Usuarios(
     @get:PropertyName("nombre")
     @set:PropertyName("nombre")
     var name: String,
@@ -40,9 +40,11 @@ data class Usuarios(
     @get:Exclude
     @set:Exclude
     var rolType: RolType = RolType.USER
-): FirebaseObjectInterface {
+): FirebaseObjectInterface() {
     @get:PropertyName("rol")
     @set:PropertyName("rol")
     var rol: Map<String, String> = mapOf("type" to rolType.value)
     constructor() : this("", "", "", "", "", Timestamp.now(), "", false, null, false)
+
+    override fun toString(): String = name
 }

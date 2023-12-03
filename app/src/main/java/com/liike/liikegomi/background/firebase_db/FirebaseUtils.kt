@@ -77,7 +77,7 @@ object FirebaseUtils {
                     callback.invoke(false, "Overflow search")
                 } else {
                     val userId = documents.first().id
-                    val userCopy = documents.first().toObject<Usuarios>()!!.copy(isLogged = true)
+                    val userCopy = documents.first().toObject<Usuarios>()!!.apply { isLogged = true }
                     if (userCopy.password == CryptUtils.encrypt(password)) {
                         if (userCopy.isActive) {
                             firestore.collection(USERS_DB_NAME).document(userId).set(userCopy, SetOptions.merge())
@@ -120,7 +120,7 @@ object FirebaseUtils {
             }
             user.let { usr ->
                 if (usr != null)
-                    firestore.collection(USERS_DB_NAME).document(userId.id).set(usr.copy(isLogged = false), SetOptions.merge()).addOnSuccessListener {
+                    firestore.collection(USERS_DB_NAME).document(userId.id).set(usr.apply { isLogged = false }, SetOptions.merge()).addOnSuccessListener {
                         callback.invoke(true, "Sesión cerrada")
                     }.addOnFailureListener {
                         callback.invoke(false, it.message ?: "Save user unknown error")
@@ -155,6 +155,42 @@ object FirebaseUtils {
                 callback.invoke(true, categoryList.sortedBy { it.idCategory }, null)
             }
         }
+    }
+
+    fun getProductCategories(callback: (Boolean, List<Categoria>?, String?) -> Unit) {
+        firestore.collection(CATEGORIES_DB_NAME).get().addOnSuccessListener { snapshot ->
+            if (snapshot.isEmpty) {
+                callback.invoke(false, null, "No se encontraron categorías, añade una primero")
+            } else {
+                val categoryList = mutableListOf<Categoria>()
+                snapshot.documents.forEach { document ->
+                    val category = document.toObject(Categoria::class.java) ?: return@forEach
+                    if (category.isVisible)
+                        categoryList.add(category)
+                }
+                callback.invoke(true, categoryList.sortedBy { it.idCategory }, null)
+            }
+        }.addOnFailureListener {
+
+        }
+    }
+
+
+    fun getLastProductCategoryId(callback: (Boolean, Int?, String?) -> Unit) {
+        firestore.collection(CATEGORIES_DB_NAME)
+            .orderBy("id_categoria", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .addOnSuccessListener {
+                if (it.isEmpty)
+                    callback.invoke(false, null, "No se encontró ningún id de categoría")
+                else {
+                    val category = it.first().toObject(Categoria::class.java)
+                    callback.invoke(true, category.idCategory, null)
+                }
+            }.addOnFailureListener {
+                callback.invoke(false, null, it.message ?: "Unknown error")
+            }
     }
 
 }

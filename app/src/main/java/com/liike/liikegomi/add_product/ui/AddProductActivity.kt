@@ -2,11 +2,14 @@ package com.liike.liikegomi.add_product.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.firestore.Blob
+import com.liike.liikegomi.add_product.adapters.SpinnerAdapter
 import com.liike.liikegomi.add_product.view_model.AddProductViewModel
 import com.liike.liikegomi.add_product.view_model.AddProductViewModelFactory
+import com.liike.liikegomi.background.firebase_db.entities.Categoria
 import com.liike.liikegomi.background.firebase_db.entities.Productos
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.BaseActivity
@@ -35,6 +38,20 @@ class AddProductActivity : BaseActivity<ActivityAddProductBinding, AddProductVie
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mViewModel.mCategories.observe(this) { categories ->
+            if (categories == null) {
+                // TODO: Maybe call the add category activity or something
+                return@observe
+            }
+            val category = Categoria("Elegir categoría", true,0)
+            mBinding.spinnerCategory.adapter = SpinnerAdapter(this@AddProductActivity, category, categories)
+        }
+
+        mViewModel.mProductAdded.observe(this) {
+            Log.i("aaa", "aaaaaaa $it")
+        }
+
         mBinding.btnTakePhoto.setOnClickListener {
             SelectImageBottomSheet.show(supportFragmentManager, object : ImageSelectionCallback {
                 override fun onImageSelected(byteArray: ByteArray?) {
@@ -46,42 +63,19 @@ class AddProductActivity : BaseActivity<ActivityAddProductBinding, AddProductVie
             })
         }
         mBinding.btnCreate.setOnClickListener {
-            /*
-            var productName: String,
-    @get:PropertyName("descripcion")
-    @set:PropertyName("descripcion")
-    var productDescription: String,
-    @get:PropertyName("precio_producto")
-    @set:PropertyName("precio_producto")
-    var productPrice: Double,
-    @get:PropertyName("stocks")
-    @set:PropertyName("stocks")
-    var productStock: Int,
-    @get:PropertyName("id_cat")
-    @set:PropertyName("id_cat")
-    var idCategoria: Int,
-    @get:PropertyName("id_producto")
-    @set:PropertyName("id_producto")
-    var productId: String,
-    @get:PropertyName("visible")
-    @set:PropertyName("visible")
-    var isVisible: Boolean = true,
-    @get:PropertyName("imagen")
-    @set:PropertyName("imagen")
-    var productImage: ByteArray? = null,
-             */
             val product = Productos()
             mBinding.run {
                 product.productName = etProductName.text()
                 product.idCategoria = 1
                 product.isVisible = true
                 product.productDescription = etProductDescription.text()
-                product.productId = 1
                 product.productStock = etStock.text().toInt()
                 product.productPrice = etPrice.text().toDouble()
                 product.productImage = Blob.fromBytes(mImage!!)
             }
-            mViewModel.addProduct(product)
+            mViewModel.getProductIdAndThenAdd(product)
         }
+
+        mViewModel.getCategories()
     }
 }

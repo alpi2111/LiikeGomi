@@ -1,3 +1,5 @@
 package com.liike.liikegomi.background.firebase_db.base
 
-interface FirebaseObjectInterface
+abstract class FirebaseObjectInterface {
+    abstract override fun toString(): String
+}

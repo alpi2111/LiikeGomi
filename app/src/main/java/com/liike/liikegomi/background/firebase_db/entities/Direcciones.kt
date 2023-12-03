@@ -3,7 +3,7 @@ package com.liike.liikegomi.background.firebase_db.entities
 import com.google.firebase.firestore.PropertyName
 import com.liike.liikegomi.background.firebase_db.base.FirebaseObjectInterface
 
-data class Direcciones(
+class Direcciones(
     @get:PropertyName("direccion") val direccion: String,
     @get:PropertyName("estado") val estado: String,
     @get:PropertyName("municipio") val municipio: String,
@@ -15,4 +15,6 @@ data class Direcciones(
     @get:PropertyName("telefono") val telefono: String,
     @get:PropertyName("referencias") val referencias: String,
     @get:PropertyName("id_direccion") val idDireccion: Int = 0,
-): FirebaseObjectInterface
+): FirebaseObjectInterface() {
+    override fun toString(): String = direccion
+}

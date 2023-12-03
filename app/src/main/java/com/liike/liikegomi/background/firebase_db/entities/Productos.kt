@@ -22,13 +22,15 @@ class Productos(
     var idCategoria: Int,
     @get:PropertyName("id_producto")
     @set:PropertyName("id_producto")
-    var productId: Int,
+    var productId: Int = -1,
     @get:PropertyName("visible")
     @set:PropertyName("visible")
     var isVisible: Boolean = true,
     @get:PropertyName("imagen")
     @set:PropertyName("imagen")
     var productImage: Blob? = null,
-): FirebaseObjectInterface {
-    constructor(): this("", "", 0.0, 0, 0, 0)
+): FirebaseObjectInterface() {
+    constructor(): this("", "", 0.0, 0, 0)
+
+    override fun toString(): String = productName
 }

@@ -135,26 +135,40 @@
                             android:maxLines="2" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/il_category"
+                    <Spinner
+                        android:id="@+id/spinner_category"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:hint="@string/category"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/il_stock">
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:minHeight="48dp"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintTop_toBottomOf="@id/il_stock"
+                        android:layout_height="wrap_content" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_category"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableStart="@drawable/ic_category"
-                            android:drawablePadding="10dp"
-                            android:drawableTint="@color/light_primary"
-                            android:inputType="text"
-                            android:maxLines="2" />
-                    </com.google.android.material.textfield.TextInputLayout>
+<!--                    <com.google.android.material.textfield.TextInputLayout-->
+<!--                        android:id="@+id/il_category"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:hint="@string/category"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toBottomOf="@id/il_stock">-->
+
+<!--                        <com.google.android.material.textfield.TextInputEditText-->
+<!--                            android:id="@+id/et_category"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:drawableStart="@drawable/ic_category"-->
+<!--                            android:drawablePadding="10dp"-->
+<!--                            android:drawableTint="@color/light_primary"-->
+<!--                            android:inputType="text"-->
+<!--                            android:maxLines="2" />-->
+<!--                    </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="80dp"/>-->
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_take_photo"
@@ -169,7 +183,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/il_category"
+                        app:layout_constraintTop_toBottomOf="@id/spinner_category"
                         app:layout_constraintWidth_percent="0.8" />
 
                     <!--                    <com.google.android.material.textfield.TextInputLayout-->
