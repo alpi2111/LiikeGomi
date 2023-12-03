@@ -138,143 +138,53 @@
                     <Spinner
                         android:id="@+id/spinner_category"
                         android:layout_width="0dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:minHeight="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        app:layout_constraintTop_toBottomOf="@id/il_stock"
-                        android:layout_height="wrap_content" />
+                        android:layout_marginEnd="10dp"
+                        android:minHeight="48dp"
+                        app:layout_constraintEnd_toStartOf="@id/checkbox_is_visible"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/il_stock" />
 
-<!--                    <com.google.android.material.textfield.TextInputLayout-->
-<!--                        android:id="@+id/il_category"-->
-<!--                        android:layout_width="0dp"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:hint="@string/category"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toBottomOf="@id/il_stock">-->
-
-<!--                        <com.google.android.material.textfield.TextInputEditText-->
-<!--                            android:id="@+id/et_category"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:drawableStart="@drawable/ic_category"-->
-<!--                            android:drawablePadding="10dp"-->
-<!--                            android:drawableTint="@color/light_primary"-->
-<!--                            android:inputType="text"-->
-<!--                            android:maxLines="2" />-->
-<!--                    </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--                    <ImageView-->
-<!--                        android:layout_width="0dp"-->
-<!--                        android:layout_height="80dp"/>-->
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_take_photo"
-                        style="@style/Widget.Material3.Button.IconButton.Outlined"
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/checkbox_is_visible"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="20dp"
-                        android:text="Agregar imagen del producto"
-                        app:icon="@drawable/ic_add_a_photo"
-                        app:iconGravity="textStart"
-                        app:iconPadding="10dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:checked="true"
+                        android:text="@string/visible"
+                        app:buttonIconTint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/spinner_category"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/spinner_category" />
+
+                    <TextView
+                        android:id="@+id/add_photo_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:lines="1"
+                        android:text="@string/add_photo"
+                        android:textSize="18sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/spinner_category"
-                        app:layout_constraintWidth_percent="0.8" />
+                        app:layout_constraintTop_toBottomOf="@id/checkbox_is_visible" />
 
-                    <!--                    <com.google.android.material.textfield.TextInputLayout-->
-                    <!--                        android:id="@+id/il_number"-->
-                    <!--                        android:layout_width="0dp"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginTop="10dp"-->
-                    <!--                        android:hint="@string/phone_number"-->
-                    <!--                        app:counterEnabled="true"-->
-                    <!--                        app:counterMaxLength="10"-->
-                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                        app:layout_constraintTop_toBottomOf="@id/il_category">-->
-
-                    <!--                        <com.google.android.material.textfield.TextInputEditText-->
-                    <!--                            android:id="@+id/et_number"-->
-                    <!--                            android:layout_width="match_parent"-->
-                    <!--                            android:layout_height="wrap_content"-->
-                    <!--                            android:drawableStart="@drawable/ic_mobile_phone"-->
-                    <!--                            android:drawablePadding="10dp"-->
-                    <!--                            android:drawableTint="@color/light_primary"-->
-                    <!--                            android:inputType="phone"-->
-                    <!--                            android:maxLines="2" />-->
-                    <!--                    </com.google.android.material.textfield.TextInputLayout>-->
-
-                    <!--                    <com.google.android.material.textfield.TextInputLayout-->
-                    <!--                        android:id="@+id/il_password"-->
-                    <!--                        android:layout_width="0dp"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginTop="10dp"-->
-                    <!--                        android:hint="@string/password"-->
-                    <!--                        app:counterEnabled="true"-->
-                    <!--                        app:errorIconDrawable="@null"-->
-                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                        app:layout_constraintTop_toBottomOf="@id/il_number"-->
-                    <!--                        app:passwordToggleEnabled="true"-->
-                    <!--                        app:passwordToggleTint="@color/light_primary">-->
-
-                    <!--                        <com.google.android.material.textfield.TextInputEditText-->
-                    <!--                            android:id="@+id/et_password"-->
-                    <!--                            android:layout_width="match_parent"-->
-                    <!--                            android:layout_height="wrap_content"-->
-                    <!--                            android:drawableStart="@android:drawable/ic_lock_lock"-->
-                    <!--                            android:drawablePadding="10dp"-->
-                    <!--                            android:drawableTint="@color/light_primary"-->
-                    <!--                            android:inputType="textPassword"-->
-                    <!--                            android:maxLines="2" />-->
-                    <!--                    </com.google.android.material.textfield.TextInputLayout>-->
-
-                    <!--                    <TextView-->
-                    <!--                        android:id="@+id/password_criteria"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginHorizontal="10dp"-->
-                    <!--                        android:layout_marginTop="5dp"-->
-                    <!--                        android:text="@string/password_criteria"-->
-                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                        app:layout_constraintTop_toBottomOf="@id/il_password" />-->
-
-                    <!--                    <com.google.android.material.textfield.TextInputLayout-->
-                    <!--                        android:id="@+id/il_password_repeated"-->
-                    <!--                        android:layout_width="0dp"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginTop="10dp"-->
-                    <!--                        android:layout_marginBottom="40dp"-->
-                    <!--                        android:hint="@string/repeat_password"-->
-                    <!--                        app:counterEnabled="true"-->
-                    <!--                        app:errorIconDrawable="@null"-->
-                    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                        app:layout_constraintTop_toBottomOf="@id/password_criteria"-->
-                    <!--                        app:passwordToggleEnabled="true"-->
-                    <!--                        app:passwordToggleTint="@color/light_primary">-->
-
-                    <!--                        <com.google.android.material.textfield.TextInputEditText-->
-                    <!--                            android:id="@+id/et_password_repeated"-->
-                    <!--                            android:layout_width="match_parent"-->
-                    <!--                            android:layout_height="wrap_content"-->
-                    <!--                            android:drawableStart="@android:drawable/ic_lock_lock"-->
-                    <!--                            android:drawablePadding="10dp"-->
-                    <!--                            android:drawableTint="@color/light_primary"-->
-                    <!--                            android:inputType="textPassword"-->
-                    <!--                            android:maxLines="2" />-->
-                    <!--                    </com.google.android.material.textfield.TextInputLayout>-->
+                    <ImageView
+                        android:id="@+id/btn_take_photo"
+                        android:layout_width="0dp"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_photo_taker"
+                        android:contentDescription="@string/add_photo"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:paddingVertical="20dp"
+                        android:src="@drawable/ic_add_a_photo"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/add_photo_label"
+                        app:tint="@color/dark_primary" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.button.MaterialButton

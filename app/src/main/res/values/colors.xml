@@ -12,4 +12,6 @@
     <color name="general_dark">#FF221D21</color>
     <color name="blue">#FF00689F</color>
     <color name="background_gray">#FFF1F2F2</color>
+    <color name="red_dark">#FF4D0000</color>
+    <color name="red_light">#FFD20B0B</color>
 </resources>
