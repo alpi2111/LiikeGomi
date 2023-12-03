@@ -183,10 +183,27 @@ object FirebaseUtils {
             .get()
             .addOnSuccessListener {
                 if (it.isEmpty)
-                    callback.invoke(false, null, "No se encontró ningún id de categoría")
+                    callback.invoke(true, 1, null)
                 else {
                     val category = it.first().toObject(Categoria::class.java)
-                    callback.invoke(true, category.idCategory, null)
+                    callback.invoke(true, category.idCategory + 1, null)
+                }
+            }.addOnFailureListener {
+                callback.invoke(false, null, it.message ?: "Unknown error")
+            }
+    }
+
+    fun getLastProductId(callback: (Boolean, Int?, String?) -> Unit) {
+        firestore.collection(PRODUCTS_DB_NAME)
+            .orderBy("id_producto", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .addOnSuccessListener {
+                if (it.isEmpty)
+                    callback.invoke(true, 1, null)
+                else {
+                    val producto = it.first().toObject(Productos::class.java)
+                    callback.invoke(true, producto.productId + 1, null)
                 }
             }.addOnFailureListener {
                 callback.invoke(false, null, it.message ?: "Unknown error")

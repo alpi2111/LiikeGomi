@@ -68,7 +68,7 @@
                             android:drawableStart="@drawable/ic_add_box"
                             android:drawablePadding="10dp"
                             android:drawableTint="@color/light_primary"
-                            android:inputType="text"
+                            android:inputType="textMultiLine"
                             android:maxLines="2" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,8 +89,8 @@
                             android:drawableStart="@drawable/ic_description"
                             android:drawablePadding="10dp"
                             android:drawableTint="@color/light_primary"
-                            android:inputType="text"
-                            android:maxLines="2" />
+                            android:inputType="textMultiLine"
+                            android:maxLines="4" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -110,8 +110,8 @@
                             android:drawableStart="@drawable/ic_attach_money"
                             android:drawablePadding="10dp"
                             android:drawableTint="@color/light_primary"
-                            android:inputType="text"
-                            android:maxLines="2" />
+                            android:inputType="numberDecimal"
+                            android:maxLines="1" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -131,8 +131,8 @@
                             android:drawableStart="@drawable/ic_123"
                             android:drawablePadding="10dp"
                             android:drawableTint="@color/light_primary"
-                            android:inputType="textEmailAddress"
-                            android:maxLines="2" />
+                            android:inputType="number"
+                            android:maxLines="1" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Spinner

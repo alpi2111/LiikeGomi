@@ -27,9 +27,9 @@ class AddProductViewModel: BaseViewModel() {
 
     fun getProductIdAndThenAdd(product: Productos) {
         progressMessage.value = "Agregando producto"
-        FirebaseUtils.getLastProductCategoryId { wasSuccess, id, message ->
+        FirebaseUtils.getLastProductId { wasSuccess, id, message ->
             if (wasSuccess) {
-                addProduct(product.apply { idCategoria = id!! })
+                addProduct(product.apply { productId = id!! })
             } else {
                 toastMessage.value = message
                 progressMessage.value = null

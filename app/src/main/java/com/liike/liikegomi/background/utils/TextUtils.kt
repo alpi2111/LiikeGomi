@@ -42,6 +42,19 @@ object TextUtils {
         return arrayOf(filter)
     }
 
+    fun onlyDecimalNumbersFilter(): Array<InputFilter> {
+        val filter = InputFilter { source, start, end, _, _, _ ->
+            for (i in start until end) {
+                if (Character.isDigit(source[i]) || source[i] == '.') {
+                    return@InputFilter source[i].toString()
+                }
+            }
+            ""
+        }
+        return arrayOf(filter)
+    }
+
+
     fun isPasswordValid(password: String): Boolean {
         return password.matches(passwordRegex)
     }
