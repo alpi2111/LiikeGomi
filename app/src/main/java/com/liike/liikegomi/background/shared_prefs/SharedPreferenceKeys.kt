@@ -8,4 +8,5 @@ sealed class SharedPreferenceKeys(val value: String) {
     data object LAST_NAME_USER: SharedPreferenceKeys("LAST_NAME_USER".lowercase())
     data object EMAIL_USER: SharedPreferenceKeys("EMAIL_USER".lowercase())
     data object PHONE_USER: SharedPreferenceKeys("PHONE_USER".lowercase())
+    data object USER_IS_ADMIN: SharedPreferenceKeys("USER_IS_ADMIN".lowercase())
 }

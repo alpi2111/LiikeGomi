@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObject
+import com.liike.liikegomi.background.database.types.RolType
 import com.liike.liikegomi.background.firebase_db.entities.Categoria
 import com.liike.liikegomi.background.firebase_db.entities.Productos
 import com.liike.liikegomi.background.firebase_db.entities.Usuarios
@@ -86,6 +87,8 @@ object FirebaseUtils {
                             SharedPrefs.string(SharedPreferenceKeys.LAST_NAME_USER, userCopy.lastName)
                             SharedPrefs.string(SharedPreferenceKeys.EMAIL_USER, userCopy.email)
                             SharedPrefs.string(SharedPreferenceKeys.PHONE_USER, userCopy.phoneNumber)
+                            val userIsAdmin = userCopy.rol["type"] == RolType.ADMIN.value
+                            SharedPrefs.bool(SharedPreferenceKeys.USER_IS_ADMIN, userIsAdmin)
                             callback.invoke(true, null)
                         } else {
                             callback.invoke(false, "El usuario no está activo, no puedes iniciar sesión")

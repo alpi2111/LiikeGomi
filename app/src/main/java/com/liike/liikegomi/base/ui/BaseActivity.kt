@@ -12,6 +12,7 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.navigation.NavigationView
 import com.liike.liikegomi.R
 import com.liike.liikegomi.add_product.ui.AddProductActivity
+import com.liike.liikegomi.background.shared_prefs.SharedPreferenceKeys
 import com.liike.liikegomi.background.shared_prefs.SharedPrefs
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.components.MainNavHeaderView
@@ -90,6 +91,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
             }
             true
         }
+        searchAndShowDrawerAdminMenuOption()
         super.onPostCreate(savedInstanceState)
     }
 
@@ -130,5 +132,13 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         } else {
             openClass.invoke()
         }
+    }
+
+    private fun searchAndShowDrawerAdminMenuOption() {
+        val navView = findViewById<NavigationView>(R.id.navigation_view)
+        val navMenu = navView?.menu
+        val adminMenu = navMenu?.findItem(R.id.admin_menu_options)
+        val isUserAdmin = SharedPrefs.bool(SharedPreferenceKeys.USER_IS_ADMIN)
+        adminMenu?.isVisible = isUserAdmin
     }
 }

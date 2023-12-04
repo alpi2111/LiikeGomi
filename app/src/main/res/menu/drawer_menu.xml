@@ -22,4 +22,19 @@
             android:icon="@drawable/ic_close_session"
             android:title="@string/close_session" />
     </group>
+
+    <item
+        android:id="@+id/admin_menu_options"
+        android:title="@string/admin_options"
+        android:visible="false">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_admin_test"
+                    android:icon="@drawable/ic_123"
+                    android:title="Test Admin" />
+            </group>
+        </menu>
+    </item>
+
 </menu>

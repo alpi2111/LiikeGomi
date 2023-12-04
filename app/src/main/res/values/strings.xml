@@ -36,4 +36,5 @@
     <string name="add_photo">Agregar fotografía</string>
     <string name="visible">Visible</string>
     <string name="no_products_found">No se encontraron productos para esta categoría</string>
+    <string name="admin_options">Opciones de administrador</string>
 </resources>
