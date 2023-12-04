@@ -31,6 +31,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
 
     private var mDrawer: DrawerLayout? = null
     private var mDrawerToggle: ActionBarDrawerToggle? = null
+    private var mNavView: NavigationView? = null
 
     abstract fun inflate(): VB
 
@@ -80,19 +81,27 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
                 toolbar?.configureDrawer(drawer)
             }
         }
-        val navView = findViewById<NavigationView>(R.id.navigation_view)
-        navView?.addHeaderView(MainNavHeaderView(this))
-        navView?.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                // TODO: ADD OTHER MENU ITEMS
-                R.id.nav_home -> launchActivityMenu(MainActivity::class) { MainActivity.launch(this) }
-                R.id.nav_close_session -> mViewModel.closeSession()
-                R.id.nav_my_purchases -> launchActivityMenu(AddProductActivity::class) { AddProductActivity.launch(this) }
+        mNavView = findViewById(R.id.navigation_view)
+        mNavView?.let {
+            it.addHeaderView(MainNavHeaderView(this))
+            it.setNavigationItemSelectedListener { menuItem ->
+                when (menuItem.itemId) {
+                    // TODO: ADD OTHER MENU ITEMS
+                    R.id.nav_home -> launchActivityMenu(MainActivity::class) { MainActivity.launch(this) }
+                    R.id.nav_close_session -> mViewModel.closeSession()
+                    R.id.nav_my_purchases -> { MessageUtils.toast(this, "Mis compras seleccionada") }
+                    R.id.nav_admin_add_product -> launchActivityMenu(AddProductActivity::class) { AddProductActivity.launch(this) }
+                }
+                true
             }
-            true
         }
         searchAndShowDrawerAdminMenuOption()
         super.onPostCreate(savedInstanceState)
+    }
+
+    override fun onRestart() {
+        mNavView?.setCheckedItem(R.id.nav_home)
+        super.onRestart()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -127,16 +136,14 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
     }
 
     private inline fun <reified T : AppCompatActivity> launchActivityMenu(kClass: KClass<T>, openClass: () -> Unit) {
-        if (this::class == kClass) {
-            mDrawer?.closeDrawers()
-        } else {
+        mDrawer?.closeDrawers()
+        if (this::class != kClass) {
             openClass.invoke()
         }
     }
 
     private fun searchAndShowDrawerAdminMenuOption() {
-        val navView = findViewById<NavigationView>(R.id.navigation_view)
-        val navMenu = navView?.menu
+        val navMenu = mNavView?.menu
         val adminMenu = navMenu?.findItem(R.id.admin_menu_options)
         val myPurchasesMenu = navMenu?.findItem(R.id.nav_my_purchases)
         myPurchasesMenu?.isVisible = false
