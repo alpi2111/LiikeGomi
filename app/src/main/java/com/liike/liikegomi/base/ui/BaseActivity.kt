@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.navigation.NavigationView
 import com.liike.liikegomi.R
+import com.liike.liikegomi.add_category.ui.AddCategoryActivity
 import com.liike.liikegomi.add_product.ui.AddProductActivity
 import com.liike.liikegomi.background.shared_prefs.SharedPreferenceKeys
 import com.liike.liikegomi.background.shared_prefs.SharedPrefs
@@ -91,6 +92,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
                     R.id.nav_close_session -> mViewModel.closeSession()
                     R.id.nav_my_purchases -> { MessageUtils.toast(this, "Mis compras seleccionada") }
                     R.id.nav_admin_add_product -> launchActivityMenu(AddProductActivity::class) { AddProductActivity.launch(this) }
+                    R.id.nav_admin_add_category -> launchActivityMenu(AddCategoryActivity::class) { AddCategoryActivity.launch(this) }
                 }
                 true
             }

@@ -42,4 +42,6 @@
     <string name="add_product">Agregar producto</string>
     <string name="administrate_users">Administrar/ver usuarios</string>
     <string name="my_sells">Mis ventas</string>
+    <string name="category_name">Nombre de la categoría</string>
+    <string name="btn_create_label">Crear</string>
 </resources>

@@ -192,7 +192,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingVertical="10dp"
-        android:text="Crear"
+        android:text="@string/btn_create_label"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

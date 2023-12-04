@@ -55,6 +55,9 @@
         <activity
             android:name=".add_product.ui.AddProductActivity"
             android:exported="true" />
+        <activity
+            android:name=".add_category.ui.AddCategoryActivity"
+            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

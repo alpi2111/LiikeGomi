@@ -235,4 +235,29 @@ object FirebaseUtils {
             }
     }
 
+    fun getLastCategoryId(callback: (Boolean, Int?, String?) -> Unit) {
+        firestore.collection(CATEGORIES_DB_NAME)
+            .orderBy("id_categoria", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .addOnSuccessListener {
+                if (it.isEmpty)
+                    callback.invoke(true, 1, null)
+                else {
+                    val categoria = it.first().toObject(Categoria::class.java)
+                    callback.invoke(true, categoria.idCategory + 1, null)
+                }
+            }.addOnFailureListener {
+                callback.invoke(false, null, it.message ?: "Unknown error")
+            }
+    }
+
+    fun addCategory(categoria: Categoria, callback: (Boolean, String?) -> Unit) {
+        firestore.collection(CATEGORIES_DB_NAME).add(categoria).addOnSuccessListener {
+            callback.invoke(true, null)
+        }.addOnFailureListener {
+            callback.invoke(false, it.message ?: "Unknown error")
+        }
+    }
+
 }
