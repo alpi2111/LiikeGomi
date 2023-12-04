@@ -49,4 +49,6 @@
     <string name="update_name">Actualizar nombre</string>
     <string name="delete">Eliminar</string>
     <string name="administrate_category">Administrar categorías</string>
+    <string name="update_info">Actualizar información</string>
+    <string name="administrate_product">Administrar productos</string>
 </resources>

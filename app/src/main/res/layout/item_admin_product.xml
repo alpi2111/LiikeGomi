@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:elevation="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardUseCompatPadding="true"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/il_product_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/product_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:helperText="ID: 1">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_add_box"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/light_primary"
+                android:inputType="textMultiLine"
+                android:maxLines="2" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/il_product_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/il_product_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_product_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_description"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/light_primary"
+                android:inputType="textMultiLine"
+                android:maxLines="4" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/il_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/price_"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/il_product_description">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_attach_money"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/light_primary"
+                android:inputType="numberDecimal"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/il_stock"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/stock_quantity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/il_price">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_stock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_123"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/light_primary"
+                android:inputType="number"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/spinner_category"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toStartOf="@id/switch_is_visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/il_stock" />
+
+        <TextView
+            android:id="@+id/add_photo_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:text="@string/add_photo"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/switch_is_visible" />
+
+        <ImageView
+            android:id="@+id/btn_take_photo"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_photo_taker"
+            android:contentDescription="@string/add_photo"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingVertical="20dp"
+            android:src="@drawable/ic_add_a_photo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_photo_label"
+            app:tint="@color/dark_primary" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_is_visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:gravity="center"
+            android:text="@string/visible"
+            app:layout_constraintBottom_toBottomOf="@id/spinner_category"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/spinner_category"
+            app:switchPadding="10dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_update_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:backgroundTint="@color/blue"
+            android:text="@string/update_info"
+            app:iconGravity="textEnd"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_delete"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_take_photo" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/red_light"
+            android:text="@string/delete"
+            app:iconGravity="textEnd"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_update_name"
+            app:layout_constraintTop_toBottomOf="@id/btn_take_photo" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
+
+

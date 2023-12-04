@@ -61,6 +61,9 @@
         <activity
             android:name=".administrate_category.ui.AdminCategoryActivity"
             android:exported="true" />
+        <activity
+            android:name=".administrate_products.ui.AdminProductsActivity"
+            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

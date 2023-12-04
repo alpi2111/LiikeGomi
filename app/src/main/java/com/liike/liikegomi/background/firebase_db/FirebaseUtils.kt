@@ -222,7 +222,7 @@ object FirebaseUtils {
             }
     }
 
-    fun getProductsByCategory(idCategory: Int, callback: (Boolean, List<Productos>?, String?) -> Unit) {
+    fun getProductsByCategory(idCategory: Int, ignoreVisibility: Boolean, callback: (Boolean, List<Productos>?, String?) -> Unit) {
         firestore.collection(PRODUCTS_DB_NAME).whereEqualTo(PRODUCT_ID_CATEGORY_DB_FIELD, idCategory)
             .orderBy(PRODUCT_ID_PRODUCT_DB_FIELD, Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, exception ->
@@ -235,7 +235,9 @@ object FirebaseUtils {
                         val products = mutableListOf<Productos>()
                         snapshot.documents.forEach { document ->
                             val product = document.toObject(Productos::class.java) ?: return@forEach
-                            if (product.isVisible)
+                            if (ignoreVisibility)
+                                products.add(product)
+                            else if (product.isVisible)
                                 products.add(product)
                         }
                         callback.invoke(true, products, null)
