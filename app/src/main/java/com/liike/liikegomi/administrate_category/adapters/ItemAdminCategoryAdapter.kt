@@ -35,6 +35,13 @@ class ItemAdminCategoryAdapter(private val viewModel: AdminCategoryViewModel): R
         notifyItemRangeInserted(0, mCategoriesList.size)
     }
 
+    fun deleteItem(position: Int) {
+        if (position in 0..<itemCount) {
+            mCategoriesList.removeAt(position)
+            notifyItemRemoved(position)
+        }
+    }
+
     class ViewHolder(private val mBinding: ItemAdminCategoryBinding) : RecyclerView.ViewHolder(mBinding.root) {
         fun bind(category: Categoria, viewModel: AdminCategoryViewModel) {
             mBinding.run {

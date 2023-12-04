@@ -32,6 +32,10 @@ class AdminCategoryActivity : BaseActivity<ActivityAdministrateCategoryBinding, 
         mCategoriesAdapter = ItemAdminCategoryAdapter(mViewModel)
         mBinding.recyclerViewCategories.adapter = mCategoriesAdapter
 
+        mViewModel.mDeletedCategoryPosition.observe(this) {
+            mCategoriesAdapter.deleteItem(it)
+        }
+
         mViewModel.mCategories.observe(this) { categoriesList ->
             mCategoriesAdapter.setData(categoriesList)
         }
