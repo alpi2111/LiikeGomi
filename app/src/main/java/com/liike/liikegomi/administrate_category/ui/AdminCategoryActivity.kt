@@ -3,7 +3,6 @@ package com.liike.liikegomi.administrate_category.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.liike.liikegomi.administrate_category.adapters.ItemAdminCategoryAdapter
 import com.liike.liikegomi.administrate_category.view_model.AdminCategoryViewModel
 import com.liike.liikegomi.administrate_category.view_model.AdminCategoryViewModelFactory
@@ -22,7 +21,7 @@ class AdminCategoryActivity : BaseActivity<ActivityAdministrateCategoryBinding, 
     }
 
     override val mViewModel: AdminCategoryViewModel
-        get() = ViewModelProvider(this, AdminCategoryViewModelFactory())[AdminCategoryViewModel::class.java]
+        get() = getViewModelFactory(this, AdminCategoryViewModelFactory())
 
     override fun inflate(): ActivityAdministrateCategoryBinding {
         return ActivityAdministrateCategoryBinding.inflate(layoutInflater)
@@ -30,7 +29,7 @@ class AdminCategoryActivity : BaseActivity<ActivityAdministrateCategoryBinding, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mCategoriesAdapter = ItemAdminCategoryAdapter()
+        mCategoriesAdapter = ItemAdminCategoryAdapter(mViewModel)
         mBinding.recyclerViewCategories.adapter = mCategoriesAdapter
 
         mViewModel.mCategories.observe(this) { categoriesList ->

@@ -1,11 +1,10 @@
 package com.liike.liikegomi.background.firebase_db.entities
 
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
 import com.liike.liikegomi.background.firebase_db.base.FirebaseObjectInterface
 
 class Categoria(
-//    @Exclude
-//    val categoryType: CategoryType,
     @get:PropertyName("categoria")
     @set:PropertyName("categoria")
     var category: String,
@@ -15,6 +14,8 @@ class Categoria(
     @get:PropertyName("id_categoria")
     @set:PropertyName("id_categoria")
     var idCategory: Int = 0,
+    @Exclude
+    var idFirebaseCategory: String = "",
 ) : FirebaseObjectInterface() {
     constructor() : this("", true, 0)
 

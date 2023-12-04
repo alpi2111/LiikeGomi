@@ -153,7 +153,7 @@ object FirebaseUtils {
                 snapshot.documents.forEach { document ->
                     val category = document.toObject(Categoria::class.java) ?: return@forEach
                     if (category.isVisible)
-                        categoryList.add(category)
+                        categoryList.add(category.apply { idFirebaseCategory = document.id })
                 }
                 callback.invoke(true, categoryList.sortedBy { it.idCategory }, null)
             }
@@ -169,7 +169,7 @@ object FirebaseUtils {
                 snapshot.documents.forEach { document ->
                     val category = document.toObject(Categoria::class.java) ?: return@forEach
                     if (category.isVisible)
-                        categoryList.add(category)
+                        categoryList.add(category.apply { idFirebaseCategory = document.id })
                 }
                 callback.invoke(true, categoryList.sortedBy { it.idCategory }, null)
             }
@@ -254,6 +254,26 @@ object FirebaseUtils {
 
     fun addCategory(categoria: Categoria, callback: (Boolean, String?) -> Unit) {
         firestore.collection(CATEGORIES_DB_NAME).add(categoria).addOnSuccessListener {
+            callback.invoke(true, null)
+        }.addOnFailureListener {
+            callback.invoke(false, it.message ?: "Unknown error")
+        }
+    }
+
+    fun updateCategory(categoria: Categoria, callback: (Boolean, String?) -> Unit) {
+        if (categoria.idFirebaseCategory.isBlank()) {
+            callback.invoke(false, "The firebase id for this category is not valid")
+            return
+        }
+        firestore.collection(CATEGORIES_DB_NAME).document(categoria.idFirebaseCategory).set(categoria, SetOptions.merge()).addOnSuccessListener {
+            callback.invoke(true, null)
+        }.addOnFailureListener {
+            callback.invoke(false, it.message ?: "Unknown error")
+        }
+    }
+
+    fun deleteCategory(idFirebaseCategory: String, callback: (Boolean, String?) -> Unit) {
+        firestore.collection(CATEGORIES_DB_NAME).document(idFirebaseCategory).delete().addOnSuccessListener {
             callback.invoke(true, null)
         }.addOnFailureListener {
             callback.invoke(false, it.message ?: "Unknown error")

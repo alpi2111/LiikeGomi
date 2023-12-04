@@ -3,11 +3,13 @@ package com.liike.liikegomi.administrate_category.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.liike.liikegomi.administrate_category.view_model.AdminCategoryViewModel
 import com.liike.liikegomi.background.firebase_db.entities.Categoria
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.databinding.ItemAdminCategoryBinding
+import com.liike.liikegomi.text
 
-class ItemAdminCategoryAdapter: RecyclerView.Adapter<ItemAdminCategoryAdapter.ViewHolder>() {
+class ItemAdminCategoryAdapter(private val viewModel: AdminCategoryViewModel): RecyclerView.Adapter<ItemAdminCategoryAdapter.ViewHolder>() {
 
     private val mCategoriesList: MutableList<Categoria> = mutableListOf()
 
@@ -16,7 +18,7 @@ class ItemAdminCategoryAdapter: RecyclerView.Adapter<ItemAdminCategoryAdapter.Vi
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(mCategoriesList[position])
+        holder.bind(mCategoriesList[position], viewModel)
     }
 
     override fun getItemCount(): Int = mCategoriesList.size
@@ -34,18 +36,24 @@ class ItemAdminCategoryAdapter: RecyclerView.Adapter<ItemAdminCategoryAdapter.Vi
     }
 
     class ViewHolder(private val mBinding: ItemAdminCategoryBinding) : RecyclerView.ViewHolder(mBinding.root) {
-        fun bind(category: Categoria) {
+        fun bind(category: Categoria, viewModel: AdminCategoryViewModel) {
             mBinding.run {
                 etCategoryTitle.setText(category.category)
                 ilCategoryTitle.helperText = "ID: ${category.idCategory}"
                 switchIsVisible.setOnCheckedChangeListener { _, isChecked ->
-                    MessageUtils.toast(this@ViewHolder.itemView.context, "${category.category} -> $isChecked")
+                    category.isVisible = isChecked
+                    viewModel.updateCategory(category)
                 }
                 btnUpdateName.setOnClickListener {
-                    MessageUtils.toast(this@ViewHolder.itemView.context, "${category.category} -> updated")
+                    if (etCategoryTitle.text() == category.category) {
+                        MessageUtils.toast(itemView.context, "El nombre no ha cambiado")
+                        return@setOnClickListener
+                    }
+                    category.category = etCategoryTitle.text()
+                    viewModel.updateCategory(category)
                 }
                 btnDelete.setOnClickListener {
-                    MessageUtils.toast(this@ViewHolder.itemView.context, "${category.category} -> deleted")
+                    viewModel.deleteCategory(category.idFirebaseCategory, adapterPosition)
                 }
             }
         }
