@@ -58,6 +58,9 @@
         <activity
             android:name=".add_category.ui.AddCategoryActivity"
             android:exported="true" />
+        <activity
+            android:name=".administrate_category.ui.AdminCategoryActivity"
+            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

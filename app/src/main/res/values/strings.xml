@@ -46,4 +46,7 @@
     <string name="btn_create_label">Crear</string>
     <string name="administrate_categories">Administrar/ver categorías</string>
     <string name="administrate_products">Administrar/ver productos</string>
+    <string name="update_name">Actualizar nombre</string>
+    <string name="delete">Eliminar</string>
+    <string name="administrate_category">Administrar categorías</string>
 </resources>
