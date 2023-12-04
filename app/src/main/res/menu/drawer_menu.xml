@@ -16,11 +16,6 @@
             android:id="@+id/nav_my_purchases"
             android:icon="@drawable/ic_shopping_bag"
             android:title="@string/my_purchases" />
-
-        <item
-            android:id="@+id/nav_close_session"
-            android:icon="@drawable/ic_close_session"
-            android:title="@string/close_session" />
     </group>
 
     <item
@@ -30,11 +25,32 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/nav_admin_test"
-                    android:icon="@drawable/ic_123"
-                    android:title="Test Admin" />
+                    android:id="@+id/nav_admin_add_admin"
+                    android:icon="@drawable/ic_person_add"
+                    android:title="@string/add_user_admin" />
+                <item
+                    android:id="@+id/nav_admin_add_category"
+                    android:icon="@drawable/ic_library_add"
+                    android:title="@string/add_category" />
+                <item
+                    android:id="@+id/nav_admin_add_product"
+                    android:icon="@drawable/ic_post_add"
+                    android:title="@string/add_product" />
+                <item
+                    android:id="@+id/nav_admin_administrate_users"
+                    android:icon="@drawable/ic_supervised_user_circle"
+                    android:title="@string/administrate_users" />
+                <item
+                    android:id="@+id/nav_admin_purchases_list"
+                    android:icon="@drawable/ic_format_list_bulleted"
+                    android:title="@string/my_sells" />
             </group>
         </menu>
     </item>
+
+    <item
+        android:id="@+id/nav_close_session"
+        android:icon="@drawable/ic_close_session"
+        android:title="@string/close_session" />
 
 </menu>

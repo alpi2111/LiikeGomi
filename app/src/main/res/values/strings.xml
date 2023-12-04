@@ -37,4 +37,9 @@
     <string name="visible">Visible</string>
     <string name="no_products_found">No se encontraron productos para esta categoría</string>
     <string name="admin_options">Opciones de administrador</string>
+    <string name="add_user_admin">Agregar usuario (admin)</string>
+    <string name="add_category">Agregar categoría</string>
+    <string name="add_product">Agregar producto</string>
+    <string name="administrate_users">Administrar/ver usuarios</string>
+    <string name="my_sells">Mis ventas</string>
 </resources>

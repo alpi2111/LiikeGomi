@@ -138,6 +138,8 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         val navView = findViewById<NavigationView>(R.id.navigation_view)
         val navMenu = navView?.menu
         val adminMenu = navMenu?.findItem(R.id.admin_menu_options)
+        val myPurchasesMenu = navMenu?.findItem(R.id.nav_my_purchases)
+        myPurchasesMenu?.isVisible = false
         val isUserAdmin = SharedPrefs.bool(SharedPreferenceKeys.USER_IS_ADMIN)
         adminMenu?.isVisible = isUserAdmin
     }
