@@ -14,7 +14,8 @@ class Categoria(
     @get:PropertyName("id_categoria")
     @set:PropertyName("id_categoria")
     var idCategory: Int = 0,
-    @Exclude
+    @get:Exclude
+    @set:Exclude
     var idFirebaseCategory: String = "",
 ) : FirebaseObjectInterface() {
     constructor() : this("", true, 0)

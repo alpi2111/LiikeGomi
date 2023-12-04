@@ -40,6 +40,7 @@ class ItemAdminCategoryAdapter(private val viewModel: AdminCategoryViewModel): R
             mBinding.run {
                 etCategoryTitle.setText(category.category)
                 ilCategoryTitle.helperText = "ID: ${category.idCategory}"
+                switchIsVisible.isChecked = category.isVisible
                 switchIsVisible.setOnCheckedChangeListener { _, isChecked ->
                     category.isVisible = isChecked
                     viewModel.updateCategory(category)

@@ -16,7 +16,7 @@ class AddProductViewModel: BaseViewModel() {
 
     fun getCategories() {
         progressMessage.value = "Obteniendo datos"
-        FirebaseUtils.getProductCategories { wasSuccess, categories, message ->
+        FirebaseUtils.getProductCategories(ignoreVisibility = false) { wasSuccess, categories, message ->
             if (!wasSuccess)
                 toastMessage.value = message
             progressMessage.value = null

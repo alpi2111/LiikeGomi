@@ -18,7 +18,7 @@ class AdminCategoryViewModel : BaseViewModel() {
 
     fun getCategories() {
         progressMessage.value = "Cargando categorías"
-        FirebaseUtils.getProductCategories { wasSuccess, categorias, message ->
+        FirebaseUtils.getProductCategories(ignoreVisibility = true) { wasSuccess, categorias, message ->
             if (wasSuccess)
                 _categories.value = categorias!!
             else

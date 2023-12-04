@@ -160,7 +160,7 @@ object FirebaseUtils {
         }
     }
 
-    fun getProductCategories(callback: (Boolean, List<Categoria>?, String?) -> Unit) {
+    fun getProductCategories(ignoreVisibility: Boolean, callback: (Boolean, List<Categoria>?, String?) -> Unit) {
         firestore.collection(CATEGORIES_DB_NAME).get().addOnSuccessListener { snapshot ->
             if (snapshot.isEmpty) {
                 callback.invoke(false, null, "No se encontraron categorías, añade una primero")
@@ -168,13 +168,15 @@ object FirebaseUtils {
                 val categoryList = mutableListOf<Categoria>()
                 snapshot.documents.forEach { document ->
                     val category = document.toObject(Categoria::class.java) ?: return@forEach
-                    if (category.isVisible)
+                    if (ignoreVisibility)
+                        categoryList.add(category.apply { idFirebaseCategory = document.id })
+                    else if (category.isVisible)
                         categoryList.add(category.apply { idFirebaseCategory = document.id })
                 }
                 callback.invoke(true, categoryList.sortedBy { it.idCategory }, null)
             }
         }.addOnFailureListener {
-
+            callback.invoke(false, null, it.message ?: "Unknown error")
         }
     }
 
