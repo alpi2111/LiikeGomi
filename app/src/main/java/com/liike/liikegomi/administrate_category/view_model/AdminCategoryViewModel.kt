@@ -35,17 +35,22 @@ class AdminCategoryViewModel : BaseViewModel() {
         }
     }
 
-    fun deleteCategory(idCategory: String, position: Int) {
+    fun deleteCategory(idFirebaseCategory: String, idCategory: Int, position: Int) {
         progressMessage.value = "Eliminando"
-        FirebaseUtils.deleteCategory(idCategory) { wasSuccess, message ->
+        FirebaseUtils.deleteCategory(idFirebaseCategory) { wasSuccess, message ->
             if (wasSuccess) {
                 _deletedCategoryPosition.value = position
             }
             viewModelScope.launch {
-                _deletedCategoryPosition.value = position
                 delay(500)
                 toastMessage.value = message ?: "Categoría eliminada"
                 progressMessage.value = null
+                progressMessage.value = "Eliminando productos"
+                val productsWereDeleted = FirebaseUtils.deleteAllProductsByCategory(idCategory)
+                if (!productsWereDeleted) {
+                    toastMessage.value = "Hubo un error al eliminar los productos, deberás eliminarlos manualmente."
+                }
+                _deletedCategoryPosition.value = position
             }
         }
     }

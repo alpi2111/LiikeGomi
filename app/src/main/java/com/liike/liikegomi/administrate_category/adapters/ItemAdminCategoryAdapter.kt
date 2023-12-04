@@ -64,11 +64,11 @@ class ItemAdminCategoryAdapter(private val viewModel: AdminCategoryViewModel): R
                     MessageUtils.dialog(
                         context = itemView.context,
                         title = "Advertencia",
-                        message = "¿Realmente deseas eliminar ${category.category}?",
+                        message = "¿Realmente deseas eliminar ${category.category}?. Esto eliminará todos los productos de ésta categoría.",
                         okButton = "Sí",
                         cancelButton = "No",
                         onOkAction = {
-                            viewModel.deleteCategory(category.idFirebaseCategory, adapterPosition)
+                            viewModel.deleteCategory(category.idFirebaseCategory, category.idCategory, adapterPosition)
                         },
                         onCancelAction = {}
                     )

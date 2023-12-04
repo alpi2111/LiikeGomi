@@ -13,6 +13,7 @@ import com.liike.liikegomi.background.firebase_db.entities.Usuarios
 import com.liike.liikegomi.background.shared_prefs.SharedPreferenceKeys
 import com.liike.liikegomi.background.shared_prefs.SharedPrefs
 import com.liike.liikegomi.background.utils.CryptUtils
+import kotlinx.coroutines.tasks.await
 
 object FirebaseUtils {
 
@@ -279,6 +280,19 @@ object FirebaseUtils {
             callback.invoke(true, null)
         }.addOnFailureListener {
             callback.invoke(false, it.message ?: "Unknown error")
+        }
+    }
+
+    suspend fun deleteAllProductsByCategory(idCategory: Int): Boolean {
+        return try {
+            val documents = firestore.collection(PRODUCTS_DB_NAME).whereEqualTo("id_cat", idCategory).get().await()
+            documents.forEach { document ->
+                firestore.collection(PRODUCTS_DB_NAME).document(document.id).delete().await()
+            }
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
         }
     }
 
