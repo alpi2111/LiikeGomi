@@ -35,4 +35,5 @@
     <string name="select_from_gallery">Seleccionar de galería</string>
     <string name="add_photo">Agregar fotografía</string>
     <string name="visible">Visible</string>
+    <string name="no_products_found">No se encontraron productos para esta categoría</string>
 </resources>

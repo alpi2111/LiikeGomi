@@ -141,8 +141,8 @@ object FirebaseUtils {
         }
     }
 
-    fun getProductCategories(activity: AppCompatActivity, callback: (Boolean, List<Categoria>?, String?) -> Unit) {
-        firestore.collection(CATEGORIES_DB_NAME).addSnapshotListener(activity) { snapshot, exception ->
+    fun getProductCategoriesListener(callback: (Boolean, List<Categoria>?, String?) -> Unit) {
+        firestore.collection(CATEGORIES_DB_NAME).addSnapshotListener { snapshot, exception ->
             if (exception != null || snapshot == null) {
                 callback.invoke(false, null, exception?.message ?: "Unknown error")
             } else {
@@ -207,6 +207,28 @@ object FirebaseUtils {
                 }
             }.addOnFailureListener {
                 callback.invoke(false, null, it.message ?: "Unknown error")
+            }
+    }
+
+    fun getProductsByCategory(idCategory: Int, callback: (Boolean, List<Productos>?, String?) -> Unit) {
+        firestore.collection(PRODUCTS_DB_NAME).whereEqualTo("id_cat", idCategory)
+            .orderBy("id_producto", Query.Direction.ASCENDING)
+            .addSnapshotListener { snapshot, exception ->
+                if (exception != null || snapshot == null) {
+                    callback.invoke(false, null, exception?.message ?: "Unknown error")
+                } else {
+                    if (snapshot.isEmpty)
+                        callback.invoke(false, null, "No existen productos para ésta categoría")
+                    else {
+                        val products = mutableListOf<Productos>()
+                        snapshot.documents.forEach { document ->
+                            val product = document.toObject(Productos::class.java) ?: return@forEach
+                            if (product.isVisible)
+                                products.add(product)
+                        }
+                        callback.invoke(true, products, null)
+                    }
+                }
             }
     }
 

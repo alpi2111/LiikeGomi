@@ -6,13 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityMainBinding
-import com.liike.liikegomi.main.ui.adapters.TestCollectionAdapter
+import com.liike.liikegomi.main.ui.adapters.MainProductsViewPagerAdapter
 import com.liike.liikegomi.main.view_model.MainViewModel
 import com.liike.liikegomi.main.view_model.MainViewModelFactory
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
-
-//    private lateinit var mCategoriesAdapter: Prod
 
     companion object {
         fun launch(appCompatActivity: AppCompatActivity) {
@@ -33,14 +31,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         super.onCreate(savedInstanceState)
 
         mViewModel.mCategoriesList.observe(this) {
-            val adapter = TestCollectionAdapter(it.size, supportFragmentManager, lifecycle)
+            val adapter = MainProductsViewPagerAdapter(it, supportFragmentManager, lifecycle)
             mBinding.viewPagerMain.adapter = adapter
             TabLayoutMediator(mBinding.tabLayoutMain, mBinding.viewPagerMain) { tab, pos ->
                 tab.text = it[pos].category
             }.attach()
         }
 
-        mViewModel.getCategories(this)
+        mViewModel.getCategories()
     }
 
 }

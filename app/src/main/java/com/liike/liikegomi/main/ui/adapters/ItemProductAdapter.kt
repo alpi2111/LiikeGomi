@@ -1,10 +1,12 @@
 package com.liike.liikegomi.main.ui.adapters
 
+import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.liike.liikegomi.background.firebase_db.entities.Productos
+import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.databinding.ItemProductMainBinding
 
 class ItemProductAdapter : RecyclerView.Adapter<ItemProductAdapter.ViewHolder>() {
@@ -60,14 +62,19 @@ class ItemProductAdapter : RecyclerView.Adapter<ItemProductAdapter.ViewHolder>()
             setData(product)
         }
 
+        @SuppressLint("SetTextI18n")
         private fun setData(product: Productos) {
             mBinding.run {
                 productTitle.text = product.productName
                 productDescription.text = product.productDescription
-                price.text = product.productPrice.toString()
+                price.text = "$${product.productPrice}"
                 val imageBytes = product.productImage!!.toBytes()
                 val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 productImage.setImageBitmap(imageBitmap)
+                addCart.setOnClickListener {
+                    // TODO: Add to cart, maybe with a callback
+                    MessageUtils.toast(this.root.context, "${product.productName} selected")
+                }
             }
         }
 
