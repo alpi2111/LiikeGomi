@@ -44,4 +44,6 @@
     <string name="my_sells">Mis ventas</string>
     <string name="category_name">Nombre de la categoría</string>
     <string name="btn_create_label">Crear</string>
+    <string name="administrate_categories">Administrar/ver categorías</string>
+    <string name="administrate_products">Administrar/ver productos</string>
 </resources>
