@@ -53,7 +53,17 @@ class ItemAdminCategoryAdapter(private val viewModel: AdminCategoryViewModel): R
                     viewModel.updateCategory(category)
                 }
                 btnDelete.setOnClickListener {
-                    viewModel.deleteCategory(category.idFirebaseCategory, adapterPosition)
+                    MessageUtils.dialog(
+                        context = itemView.context,
+                        title = "Advertencia",
+                        message = "¿Realmente deseas eliminar ${category.category}?",
+                        okButton = "Sí",
+                        cancelButton = "No",
+                        onOkAction = {
+                            viewModel.deleteCategory(category.idFirebaseCategory, adapterPosition)
+                        },
+                        onCancelAction = {}
+                    )
                 }
             }
         }
