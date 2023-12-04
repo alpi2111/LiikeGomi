@@ -22,11 +22,11 @@
             android:id="@+id/il_category_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:hint="@string/category_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:helperText="ID_CATEGORY"
-            tools:hint="@string/category_name">
+            tools:helperText="ID_CATEGORY">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_category_title"

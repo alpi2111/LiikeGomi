@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.liike.liikegomi.background.firebase_db.entities.Categoria
+import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.databinding.ItemAdminCategoryBinding
 
 class ItemAdminCategoryAdapter: RecyclerView.Adapter<ItemAdminCategoryAdapter.ViewHolder>() {
@@ -34,7 +35,19 @@ class ItemAdminCategoryAdapter: RecyclerView.Adapter<ItemAdminCategoryAdapter.Vi
 
     class ViewHolder(private val mBinding: ItemAdminCategoryBinding) : RecyclerView.ViewHolder(mBinding.root) {
         fun bind(category: Categoria) {
-            mBinding.run {  }
+            mBinding.run {
+                etCategoryTitle.setText(category.category)
+                ilCategoryTitle.helperText = "ID: ${category.idCategory}"
+                switchIsVisible.setOnCheckedChangeListener { _, isChecked ->
+                    MessageUtils.toast(this@ViewHolder.itemView.context, "${category.category} -> $isChecked")
+                }
+                btnUpdateName.setOnClickListener {
+                    MessageUtils.toast(this@ViewHolder.itemView.context, "${category.category} -> updated")
+                }
+                btnDelete.setOnClickListener {
+                    MessageUtils.toast(this@ViewHolder.itemView.context, "${category.category} -> deleted")
+                }
+            }
         }
 
         companion object {

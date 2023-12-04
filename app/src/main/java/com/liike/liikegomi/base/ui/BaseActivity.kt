@@ -13,6 +13,7 @@ import com.google.android.material.navigation.NavigationView
 import com.liike.liikegomi.R
 import com.liike.liikegomi.add_category.ui.AddCategoryActivity
 import com.liike.liikegomi.add_product.ui.AddProductActivity
+import com.liike.liikegomi.administrate_category.ui.AdminCategoryActivity
 import com.liike.liikegomi.background.shared_prefs.SharedPreferenceKeys
 import com.liike.liikegomi.background.shared_prefs.SharedPrefs
 import com.liike.liikegomi.background.utils.MessageUtils
@@ -93,6 +94,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
                     R.id.nav_my_purchases -> { MessageUtils.toast(this, "Mis compras seleccionada") }
                     R.id.nav_admin_add_product -> launchActivityMenu(AddProductActivity::class) { AddProductActivity.launch(this) }
                     R.id.nav_admin_add_category -> launchActivityMenu(AddCategoryActivity::class) { AddCategoryActivity.launch(this) }
+                    R.id.nav_admin_categories_list -> launchActivityMenu(AdminCategoryActivity::class) { AdminCategoryActivity.launch(this) }
                 }
                 true
             }
