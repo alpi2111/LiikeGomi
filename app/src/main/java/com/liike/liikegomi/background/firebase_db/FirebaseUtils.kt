@@ -7,6 +7,15 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObject
 import com.liike.liikegomi.background.database.types.RolType
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.CATEGORIES_DB_NAME
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.CATEGORY_ID_CATEGORY_DB_FIELD
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRODUCTS_DB_NAME
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRODUCT_ID_CATEGORY_DB_FIELD
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRODUCT_ID_PRODUCT_DB_FIELD
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USERS_DB_NAME
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USER_EMAIL_DB_FIELD
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USER_TYPE_DB_FIELD
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USER_USERNAME_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.entities.Categoria
 import com.liike.liikegomi.background.firebase_db.entities.Productos
 import com.liike.liikegomi.background.firebase_db.entities.Usuarios
@@ -17,9 +26,6 @@ import kotlinx.coroutines.tasks.await
 
 object FirebaseUtils {
 
-    private const val USERS_DB_NAME = "usuarios"
-    private const val PRODUCTS_DB_NAME = "productos"
-    private const val CATEGORIES_DB_NAME = "categorias"
     private val firestore by lazy { FirebaseFirestore.getInstance() }
 
     fun saveUser(activity: AppCompatActivity, user: Usuarios, callback: (Boolean) -> Unit) {
@@ -32,7 +38,7 @@ object FirebaseUtils {
 
     private fun getUserFromUserNameQuery(userName: String): Query {
         val userEncrypted = CryptUtils.encrypt(userName.trim())
-        return firestore.collection(USERS_DB_NAME).whereEqualTo("nombre_usuario", userEncrypted)
+        return firestore.collection(USERS_DB_NAME).whereEqualTo(USER_USERNAME_DB_FIELD, userEncrypted)
     }
 
     private fun isUserNameAvailable(activity: AppCompatActivity, userName: String, callback: (Boolean, String?) -> Unit) {
@@ -48,7 +54,7 @@ object FirebaseUtils {
 
     private fun isEmailAvailable(activity: AppCompatActivity, email: String, callback: (Boolean, String?) -> Unit) {
         val emailEncrypted = CryptUtils.encrypt(email.trim())
-        firestore.collection(USERS_DB_NAME).whereEqualTo("correo", emailEncrypted).get().addOnSuccessListener(activity) { documents ->
+        firestore.collection(USERS_DB_NAME).whereEqualTo(USER_EMAIL_DB_FIELD, emailEncrypted).get().addOnSuccessListener(activity) { documents ->
             if (documents.isEmpty)
                 callback.invoke(true, null)
             else
@@ -88,7 +94,7 @@ object FirebaseUtils {
                             SharedPrefs.string(SharedPreferenceKeys.LAST_NAME_USER, userCopy.lastName)
                             SharedPrefs.string(SharedPreferenceKeys.EMAIL_USER, userCopy.email)
                             SharedPrefs.string(SharedPreferenceKeys.PHONE_USER, userCopy.phoneNumber)
-                            val userIsAdmin = userCopy.rol["type"] == RolType.ADMIN.value
+                            val userIsAdmin = userCopy.rol[USER_TYPE_DB_FIELD] == RolType.ADMIN.value
                             SharedPrefs.bool(SharedPreferenceKeys.USER_IS_ADMIN, userIsAdmin)
                             callback.invoke(true, null)
                         } else {
@@ -184,7 +190,7 @@ object FirebaseUtils {
 
     fun getLastProductCategoryId(callback: (Boolean, Int?, String?) -> Unit) {
         firestore.collection(CATEGORIES_DB_NAME)
-            .orderBy("id_categoria", Query.Direction.DESCENDING)
+            .orderBy(CATEGORY_ID_CATEGORY_DB_FIELD, Query.Direction.DESCENDING)
             .limit(1)
             .get()
             .addOnSuccessListener {
@@ -201,7 +207,7 @@ object FirebaseUtils {
 
     fun getLastProductId(callback: (Boolean, Int?, String?) -> Unit) {
         firestore.collection(PRODUCTS_DB_NAME)
-            .orderBy("id_producto", Query.Direction.DESCENDING)
+            .orderBy(PRODUCT_ID_PRODUCT_DB_FIELD, Query.Direction.DESCENDING)
             .limit(1)
             .get()
             .addOnSuccessListener {
@@ -217,8 +223,8 @@ object FirebaseUtils {
     }
 
     fun getProductsByCategory(idCategory: Int, callback: (Boolean, List<Productos>?, String?) -> Unit) {
-        firestore.collection(PRODUCTS_DB_NAME).whereEqualTo("id_cat", idCategory)
-            .orderBy("id_producto", Query.Direction.ASCENDING)
+        firestore.collection(PRODUCTS_DB_NAME).whereEqualTo(PRODUCT_ID_CATEGORY_DB_FIELD, idCategory)
+            .orderBy(PRODUCT_ID_PRODUCT_DB_FIELD, Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, exception ->
                 if (exception != null || snapshot == null) {
                     callback.invoke(false, null, exception?.message ?: "Unknown error")
@@ -240,7 +246,7 @@ object FirebaseUtils {
 
     fun getLastCategoryId(callback: (Boolean, Int?, String?) -> Unit) {
         firestore.collection(CATEGORIES_DB_NAME)
-            .orderBy("id_categoria", Query.Direction.DESCENDING)
+            .orderBy(CATEGORY_ID_CATEGORY_DB_FIELD, Query.Direction.DESCENDING)
             .limit(1)
             .get()
             .addOnSuccessListener {
@@ -285,7 +291,7 @@ object FirebaseUtils {
 
     suspend fun deleteAllProductsByCategory(idCategory: Int): Boolean {
         return try {
-            val documents = firestore.collection(PRODUCTS_DB_NAME).whereEqualTo("id_cat", idCategory).get().await()
+            val documents = firestore.collection(PRODUCTS_DB_NAME).whereEqualTo(PRODUCT_ID_CATEGORY_DB_FIELD, idCategory).get().await()
             documents.forEach { document ->
                 firestore.collection(PRODUCTS_DB_NAME).document(document.id).delete().await()
             }
