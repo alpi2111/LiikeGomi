@@ -110,7 +110,6 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         searchAndShowDrawerAdminMenuOption()
         mViewModel.mIsCartEmpty.observe(this) { isEmpty ->
             mIsCartEmpty = isEmpty
-            val menu = toolbar?.menu
             invalidateOptionsMenu()
         }
         super.onPostCreate(savedInstanceState)

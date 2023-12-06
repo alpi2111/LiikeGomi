@@ -34,16 +34,35 @@ class ShoppingCartActivity: BaseActivity<ActivityShoppingCartBinding, ShoppingCa
                 hideProgress()
                 mBinding.noCartItems.isVisible = true
                 mBinding.total.text = "$0.00"
+                mBinding.btnPay.isEnabled = false
+                mBinding.btnPay.text = "Pagar"
                 return@observe
             }
             if (mViewModel.cartIsNotValid(cart)) {
                 hideProgress()
                 mBinding.noCartItems.text = "Carrito no válido"
                 mBinding.noCartItems.isVisible = true
+                mBinding.btnPay.isEnabled = false
+                mBinding.btnPay.text = "Pagar"
+                return@observe
+            }
+            if (cart.productos.isNullOrEmpty()) {
+                hideProgress()
+                mBinding.noCartItems.isVisible = true
+                mBinding.total.text = "$0.00"
+                mBinding.btnPay.isEnabled = false
+                mBinding.btnPay.text = "Pagar"
                 return@observe
             }
             hideProgress()
+            mBinding.noCartItems.isVisible = false
+            var total = 0.0
+            cart.productos?.forEach {
+                total += it!!.precioUnidad!! * it.cantidad!!
+            }
+            mBinding.total.text = "$$total"
             mBinding.btnPay.isEnabled = true
+            mBinding.btnPay.text = "Pagar (${cart.productos?.size ?: 0} producto(s))"
         }
         mViewModel.getShoppingCart()
     }
