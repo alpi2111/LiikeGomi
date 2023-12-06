@@ -1,5 +1,6 @@
 package com.liike.liikegomi.background.firebase_db
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -235,6 +236,7 @@ object FirebaseUtils {
                         val products = mutableListOf<Productos>()
                         snapshot.documents.forEach { document ->
                             val product = document.toObject(Productos::class.java) ?: return@forEach
+                            product.productIdFirebase = document.id
                             if (ignoreVisibility)
                                 products.add(product)
                             else if (product.isVisible)
@@ -300,6 +302,26 @@ object FirebaseUtils {
             true
         } catch (e: Exception) {
             e.printStackTrace()
+            false
+        }
+    }
+
+    suspend fun deleteProduct(product: Productos): Boolean {
+        return try {
+            firestore.collection(PRODUCTS_DB_NAME).document(product.productIdFirebase).delete().await()
+            true
+        } catch (e: Exception) {
+            Log.e("deleteProductError", e.message ?: "Unknown error")
+            false
+        }
+    }
+
+    suspend fun updateProduct(product: Productos): Boolean {
+        return try {
+            firestore.collection(PRODUCTS_DB_NAME).document(product.productIdFirebase).set(product, SetOptions.merge()).await()
+            true
+        } catch (e: Exception) {
+            Log.e("deleteProductError", e.message ?: "Unknown error")
             false
         }
     }

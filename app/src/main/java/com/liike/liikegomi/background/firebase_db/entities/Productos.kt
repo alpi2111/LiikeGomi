@@ -1,6 +1,7 @@
 package com.liike.liikegomi.background.firebase_db.entities
 
 import com.google.firebase.firestore.Blob
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
 import com.liike.liikegomi.background.firebase_db.base.FirebaseObjectInterface
 
@@ -29,6 +30,9 @@ class Productos(
     @get:PropertyName("imagen")
     @set:PropertyName("imagen")
     var productImage: Blob? = null,
+    @get:Exclude
+    @set:Exclude
+    var productIdFirebase: String = ""
 ): FirebaseObjectInterface() {
     constructor(): this("", "", 0.0, 0, 0)
 

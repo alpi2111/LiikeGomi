@@ -30,7 +30,7 @@ class AdminProductsActivity : BaseActivity<ActivityAdministrateProductsBinding, 
         super.onCreate(savedInstanceState)
 
         mViewModel.mCategoriesList.observe(this) {
-            val adapter = AdminProductsViewPagerAdapter(it, supportFragmentManager, lifecycle)
+            val adapter = AdminProductsViewPagerAdapter(it, mViewModel, supportFragmentManager, lifecycle)
             mBinding.viewPagerProducts.adapter = adapter
             TabLayoutMediator(mBinding.tabLayoutProducts, mBinding.viewPagerProducts) { tab, pos ->
                 tab.text = it[pos].category
