@@ -114,6 +114,9 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         if (isBoardingActivity())
             return false
         menuInflater.inflate(R.menu.toolbar_menu, menu)
+        val cart = menu?.findItem(R.id.shopping_cart)
+        val isUserAdmin = SharedPrefs.bool(SharedPreferenceKeys.USER_IS_ADMIN)
+        cart?.isVisible = !isUserAdmin
         return true
     }
 
@@ -122,7 +125,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
             return true
         }
         return when (item.itemId) {
-            R.id.shoping_cart -> {
+            R.id.shopping_cart -> {
                 // OPEN CART ACTIVITY
                 MessageUtils.toast(this, "Shopping cart")
                 true
@@ -153,7 +156,9 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         val adminMenu = navMenu?.findItem(R.id.admin_menu_options)
         val myPurchasesMenu = navMenu?.findItem(R.id.nav_my_purchases)
         myPurchasesMenu?.isVisible = false
+        val userProfile = navMenu?.findItem(R.id.nav_profile)
         val isUserAdmin = SharedPrefs.bool(SharedPreferenceKeys.USER_IS_ADMIN)
+        userProfile?.isVisible = !isUserAdmin
         adminMenu?.isVisible = isUserAdmin
     }
 }
