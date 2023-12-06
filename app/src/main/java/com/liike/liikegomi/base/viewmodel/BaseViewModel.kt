@@ -20,6 +20,9 @@ abstract class BaseViewModel: ViewModel() {
     private val _closeSession = MutableLiveData<Boolean>()
     val mCloseSession: LiveData<Boolean> = _closeSession
 
+    private val _isCartEmpty = MutableLiveData<Boolean>()
+    val mIsCartEmpty: LiveData<Boolean> = _isCartEmpty
+
     fun listenForLoginOrActivatedUser(activity: AppCompatActivity) {
         FirebaseUtils.getUserDocumentReference()?.addSnapshotListener(activity) { document, _ ->
             val user = document?.toObject<Usuarios>()
@@ -47,6 +50,13 @@ abstract class BaseViewModel: ViewModel() {
             toastMessage.value = message
             progressMessage.value = null
             _closeSession.value = sessionClosed
+        }
+    }
+
+    fun verifyCartEmpty() {
+        viewModelScope.launch {
+            val isEmpty = FirebaseUtils.isCartEmpty()
+            _isCartEmpty.value = isEmpty
         }
     }
 

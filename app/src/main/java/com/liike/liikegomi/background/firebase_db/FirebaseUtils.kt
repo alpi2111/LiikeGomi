@@ -414,4 +414,10 @@ object FirebaseUtils {
         }
     }
 
+    suspend fun isCartEmpty(): Boolean {
+        val id = SharedPrefs.string(SharedPreferenceKeys.USER_ID) ?: return true
+        val cart = getCartByUser(id)
+        return cart?.productos?.isEmpty() ?: true
+    }
+
 }

@@ -1,10 +1,12 @@
 package com.liike.liikegomi.base.ui
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -36,6 +38,9 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
     private var mDrawer: DrawerLayout? = null
     private var mDrawerToggle: ActionBarDrawerToggle? = null
     private var mNavView: NavigationView? = null
+    private var mIsCartEmpty = true
+    private val mDrawableShoppingCart: Drawable? by lazy { AppCompatResources.getDrawable(this, R.drawable.ic_shopping_cart) }
+    private val mDrawableShoppingCartCheckout: Drawable? by lazy { AppCompatResources.getDrawable(this, R.drawable.ic_shopping_cart_checkout) }
 
     abstract fun inflate(): VB
 
@@ -103,7 +108,17 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
             }
         }
         searchAndShowDrawerAdminMenuOption()
+        mViewModel.mIsCartEmpty.observe(this) { isEmpty ->
+            mIsCartEmpty = isEmpty
+            val menu = toolbar?.menu
+            invalidateOptionsMenu()
+        }
         super.onPostCreate(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mViewModel.verifyCartEmpty()
     }
 
     override fun onRestart() {
@@ -116,6 +131,11 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
             return false
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         val cart = menu?.findItem(R.id.shopping_cart)
+        if (mIsCartEmpty) {
+            cart?.icon = mDrawableShoppingCart
+        } else {
+            cart?.icon = mDrawableShoppingCartCheckout
+        }
         val isUserAdmin = SharedPrefs.bool(SharedPreferenceKeys.USER_IS_ADMIN)
         cart?.isVisible = !isUserAdmin
         if (isShoppingCartView())
