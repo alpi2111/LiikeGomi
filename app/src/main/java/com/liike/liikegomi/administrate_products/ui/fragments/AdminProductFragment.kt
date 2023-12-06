@@ -1,8 +1,12 @@
 package com.liike.liikegomi.administrate_products.ui.fragments
 
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import com.liike.liikegomi.administrate_products.adapters.AdminProductsAdapter
+import com.liike.liikegomi.administrate_products.adapters.AdminProductsCallback
 import com.liike.liikegomi.administrate_products.view_model.AdminProductsViewModel
+import com.liike.liikegomi.administrate_products.view_model.AdminProductsViewModelFactory
+import com.liike.liikegomi.background.firebase_db.entities.Productos
 import com.liike.liikegomi.base.ui.BaseFragment
 import com.liike.liikegomi.databinding.FragmentAdminProductBinding
 
@@ -16,9 +20,24 @@ class AdminProductFragment(private val idCategory: Int, private val mViewModel: 
 
     override fun onCreateView() {
 
-        mProductsAdapter = AdminProductsAdapter(mViewModel)
+        val viewModel = try {
+            ViewModelProvider(this)[AdminProductsViewModel::class.java]
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ViewModelProvider(this, AdminProductsViewModelFactory())[AdminProductsViewModel::class.java]
+        }
 
-        mViewModel.mProductsList.observe(this.viewLifecycleOwner) {
+        mProductsAdapter = AdminProductsAdapter(mViewModel, object : AdminProductsCallback {
+            override fun update(product: Productos) {
+                viewModel.updateProduct(product)
+            }
+
+            override fun delete(product: Productos, position: Int) {
+                viewModel.deleteProduct(product, position)
+            }
+        })
+
+        viewModel.mProductsList.observe(this.viewLifecycleOwner) {
             if (it.isEmpty()) {
                 mBinding.recyclerViewProducts.isVisible = false
                 mBinding.progressBar.isVisible = false
@@ -37,6 +56,6 @@ class AdminProductFragment(private val idCategory: Int, private val mViewModel: 
 
         mBinding.recyclerViewProducts.adapter = mProductsAdapter
 
-        mViewModel.getProductsByCategory(idCategory)
+        viewModel.getProductsByCategory(idCategory)
     }
 }

@@ -19,7 +19,7 @@ import com.liike.liikegomi.image_picker.background.interfaces.ImageSelectionCall
 import com.liike.liikegomi.image_picker.ui.SelectImageBottomSheet
 import com.liike.liikegomi.text
 
-class AdminProductsAdapter(private val viewModel: AdminProductsViewModel) : RecyclerView.Adapter<AdminProductsAdapter.ViewHolder>() {
+class AdminProductsAdapter(private val viewModel: AdminProductsViewModel, private val callback: AdminProductsCallback) : RecyclerView.Adapter<AdminProductsAdapter.ViewHolder>() {
 
     private val mProductsList: MutableList<Productos> = mutableListOf()
 
@@ -28,7 +28,7 @@ class AdminProductsAdapter(private val viewModel: AdminProductsViewModel) : Recy
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(mProductsList[position])
+        holder.bind(mProductsList[position], callback)
     }
 
     override fun getItemCount(): Int = mProductsList.size
@@ -59,7 +59,7 @@ class AdminProductsAdapter(private val viewModel: AdminProductsViewModel) : Recy
             SpinnerAdapter(itemView.context, Categoria("Elige una categoría", true, -1, ""), viewModel.mCategoriesList.value!!)
         }
 
-        fun bind(product: Productos) {
+        fun bind(product: Productos, callback: AdminProductsCallback) {
             mBinding.run {
                 etProductName.setText(product.productName)
                 ilProductName.helperText = "ID: ${product.productId}"
@@ -115,7 +115,7 @@ class AdminProductsAdapter(private val viewModel: AdminProductsViewModel) : Recy
                     val imageBytes = viewModel.getImageBytesByPosition(adapterPosition)
                     if (imageBytes != null)
                         product.productImage = Blob.fromBytes(imageBytes)
-                    viewModel.updateProduct(product)
+                    callback.update(product)
                 }
 
                 btnDelete.setOnClickListener {
@@ -126,7 +126,7 @@ class AdminProductsAdapter(private val viewModel: AdminProductsViewModel) : Recy
                         okButton = "Sí",
                         cancelButton = "No",
                         onOkAction = {
-                            viewModel.deleteProduct(product, adapterPosition)
+                            callback.delete(product, adapterPosition)
                         },
                         onCancelAction = {}
                     )
