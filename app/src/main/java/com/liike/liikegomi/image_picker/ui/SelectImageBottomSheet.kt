@@ -18,12 +18,18 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.liike.liikegomi.background.utils.ImageUtils
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.databinding.BottomSheetSelectImageBinding
 import com.liike.liikegomi.image_picker.background.interfaces.ImageSelectionCallback
-import java.io.ByteArrayOutputStream
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.format
+import id.zelory.compressor.constraint.quality
+import id.zelory.compressor.constraint.resolution
+import id.zelory.compressor.constraint.size
+import kotlinx.coroutines.launch
 import java.io.File
 
 class SelectImageBottomSheet private constructor(private val callback: ImageSelectionCallback) : BottomSheetDialogFragment() {
@@ -146,17 +152,18 @@ class SelectImageBottomSheet private constructor(private val callback: ImageSele
             e.printStackTrace()
             MessageUtils.toast(requireContext(), "Error not catch, due to ${e.message}")
         } finally {
-            filePath.let { path ->
-                if (path.isNullOrBlank()) {
-                    callback.onImageSelected(null)
-                } else {
-                    val file = File(path)
-                    val fileBytes = file.readBytes()
-                    val bitmap = BitmapFactory.decodeByteArray(fileBytes, 0, fileBytes.size)
-                    val bytesCompressed = compressTo1Mb(bitmap)
-                    callback.onImageSelected(bytesCompressed)
+            requireActivity().lifecycleScope.launch {
+                filePath.let { path ->
+                    if (path.isNullOrBlank()) {
+                        callback.onImageSelected(null)
+                    } else {
+                        val file = File(path)
+                        val fileCompressed = compressTo1Mb(file)
+                        val fileBytes = fileCompressed.readBytes()
+                        callback.onImageSelected(fileBytes)
+                    }
+                    dismiss()
                 }
-                dismiss()
             }
         }
     }
@@ -177,15 +184,18 @@ class SelectImageBottomSheet private constructor(private val callback: ImageSele
         }
 
         try {
-            val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            val rotatedBitmap = ImageUtils.rotateImage(bitmap, fileTemp.absolutePath)
-            val bytes = compressTo1Mb(rotatedBitmap)
-//            val stream = ByteArrayOutputStream()
-//            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, stream)
-//            val bytes = stream.toByteArray()
-//            rotatedBitmap.recycle()
-            callback.onImageSelected(bytes)
-            dismiss()
+            requireActivity().lifecycleScope.launch {
+                val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                val rotatedBitmap = ImageUtils.rotateImage(bitmap, fileTemp.absolutePath)
+                val newFile = File(fileTemp.toURI())
+                newFile.outputStream().use {
+                    rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, it)
+                    it.flush()
+                }
+                val bytes = compressTo1Mb(newFile)
+                callback.onImageSelected(bytes.readBytes())
+                dismiss()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             MessageUtils.toast(requireContext(), "Error not catch camera, ${e.message}")
@@ -203,16 +213,12 @@ class SelectImageBottomSheet private constructor(private val callback: ImageSele
         return mFileTemp
     }
 
-    private fun compressTo1Mb(bitmap: Bitmap): ByteArray {
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
-        val bytes = stream.toByteArray()
-        bitmap.recycle()
-        // 1048487
-        if (bytes.size > 1048487) {
-            val newBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            return compressTo1Mb(newBitmap)
+    private suspend fun compressTo1Mb(file: File): File {
+        return Compressor.compress(requireContext(), file) {
+            resolution(800, 600)
+            quality(80)
+            format(Bitmap.CompressFormat.JPEG)
+            size(1048400L)
         }
-        return bytes
     }
 }
