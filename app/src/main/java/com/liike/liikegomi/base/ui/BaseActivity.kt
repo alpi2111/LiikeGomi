@@ -25,6 +25,7 @@ import com.liike.liikegomi.base.viewmodel.BaseViewModelFactory
 import com.liike.liikegomi.login.ui.LoginActivity
 import com.liike.liikegomi.main.ui.MainActivity
 import com.liike.liikegomi.register.ui.RegisterActivity
+import com.liike.liikegomi.shopping_cart.ui.ShoppingCartActivity
 import kotlin.reflect.KClass
 
 abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatActivity() {
@@ -117,6 +118,8 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         val cart = menu?.findItem(R.id.shopping_cart)
         val isUserAdmin = SharedPrefs.bool(SharedPreferenceKeys.USER_IS_ADMIN)
         cart?.isVisible = !isUserAdmin
+        if (isShoppingCartView())
+            cart?.isVisible = false
         return true
     }
 
@@ -126,8 +129,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         }
         return when (item.itemId) {
             R.id.shopping_cart -> {
-                // OPEN CART ACTIVITY
-                MessageUtils.toast(this, "Shopping cart")
+                ShoppingCartActivity.launch(this)
                 true
             }
             R.id.nav_home -> {
@@ -160,5 +162,9 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         val isUserAdmin = SharedPrefs.bool(SharedPreferenceKeys.USER_IS_ADMIN)
         userProfile?.isVisible = !isUserAdmin
         adminMenu?.isVisible = isUserAdmin
+    }
+
+    private fun isShoppingCartView(): Boolean {
+        return this is ShoppingCartActivity
     }
 }

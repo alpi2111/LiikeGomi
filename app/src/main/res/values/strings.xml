@@ -51,4 +51,8 @@
     <string name="administrate_category">Administrar categorías</string>
     <string name="update_info">Actualizar información</string>
     <string name="administrate_product">Administrar productos</string>
+    <string name="cart">Carrito</string>
+    <string name="minus">Restar</string>
+    <string name="pay">Pagar</string>
+    <string name="total_">Total:</string>
 </resources>

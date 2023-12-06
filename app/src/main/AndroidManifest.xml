@@ -64,6 +64,9 @@
         <activity
             android:name=".administrate_products.ui.AdminProductsActivity"
             android:exported="true" />
+        <activity
+            android:name=".shopping_cart.ui.ShoppingCartActivity"
+            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
