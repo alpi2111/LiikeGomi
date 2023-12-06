@@ -9,7 +9,7 @@ import com.liike.liikegomi.background.firebase_db.entities.Productos
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.databinding.ItemProductMainBinding
 
-class ItemProductAdapter : RecyclerView.Adapter<ItemProductAdapter.ViewHolder>() {
+class ItemProductAdapter(private val callback: AddCartItemCallback) : RecyclerView.Adapter<ItemProductAdapter.ViewHolder>() {
 
     private val mProductList: MutableList<Productos> = mutableListOf()
 
@@ -18,14 +18,14 @@ class ItemProductAdapter : RecyclerView.Adapter<ItemProductAdapter.ViewHolder>()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(mProductList[position])
+        holder.bind(mProductList[position], callback)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         if (payloads.isEmpty())
             super.onBindViewHolder(holder, position, payloads)
         else
-            holder.updateProduct(mProductList[position])
+            holder.updateProduct(mProductList[position], callback)
     }
 
     override fun getItemCount(): Int = mProductList.size
@@ -54,16 +54,16 @@ class ItemProductAdapter : RecyclerView.Adapter<ItemProductAdapter.ViewHolder>()
     }
 
     class ViewHolder(private val mBinding: ItemProductMainBinding) : RecyclerView.ViewHolder(mBinding.root) {
-        fun bind(product: Productos) {
-            setData(product)
+        fun bind(product: Productos, callback: AddCartItemCallback) {
+            setData(product, callback)
         }
 
-        fun updateProduct(product: Productos) {
-            setData(product)
+        fun updateProduct(product: Productos, callback: AddCartItemCallback) {
+            setData(product, callback)
         }
 
         @SuppressLint("SetTextI18n")
-        private fun setData(product: Productos) {
+        private fun setData(product: Productos, callback: AddCartItemCallback) {
             mBinding.run {
                 productTitle.text = product.productName
                 productDescription.text = product.productDescription
@@ -72,8 +72,8 @@ class ItemProductAdapter : RecyclerView.Adapter<ItemProductAdapter.ViewHolder>()
                 val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 productImage.setImageBitmap(imageBitmap)
                 addCart.setOnClickListener {
-                    // TODO: Add to cart, maybe with a callback
-                    MessageUtils.toast(this.root.context, "${product.productName} selected")
+                    MessageUtils.toast(this.root.context, "${product.productName} añadido")
+                    callback.addToCart(product)
                 }
             }
         }

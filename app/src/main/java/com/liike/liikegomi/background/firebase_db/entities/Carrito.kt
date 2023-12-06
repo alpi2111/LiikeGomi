@@ -16,6 +16,9 @@ class Carrito(
     var idFirebaseCarrito: String?
 ) {
     class Producto(
+        @get:PropertyName("nombre")
+        @set:PropertyName("nombre")
+        var nombre: String?,
         @get:PropertyName("cantidad")
         @set:PropertyName("cantidad")
         var cantidad: Int?,
@@ -26,7 +29,7 @@ class Carrito(
         @set:PropertyName("precio_unidad")
         var precioUnidad: Double?,
     ) {
-        constructor() : this(null, null, null)
+        constructor() : this(null, null, null, null)
     }
 
     constructor() : this(null, null, null)

@@ -343,4 +343,75 @@ object FirebaseUtils {
         }
     }
 
+    suspend fun addProductToCart(firebaseUserId: String, product: Productos, quantity: Int = 1): Boolean {
+        val cart = getCartByUser(firebaseUserId)
+        val productCart = Carrito().apply {
+            idFirebaseCarrito = null
+            nombreUsuario = firebaseUserId
+        }
+        if (cart == null) {
+            // NO CART EXIST
+            productCart.productos = listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice))
+            return try {
+                firestore.collection(CART_DB_NAME).add(productCart).await()
+                true
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
+            }
+        }
+        if (cart.nombreUsuario.isNullOrBlank() or cart.idFirebaseCarrito.isNullOrBlank()) {
+            // THERE'S MORE THAN ONE CART
+            val safeCart = getCartAndDeleteOthersUserCarts(firebaseUserId)
+            if (safeCart == null) {
+                productCart.productos = listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice))
+                return try {
+                    firestore.collection(CART_DB_NAME).add(productCart).await()
+                    true
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    false
+                }
+            } else {
+                if (safeCart.productos == null)
+                    safeCart.productos = listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice))
+                else
+                    safeCart.productos = safeCart.productos!! + listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice))
+                return try {
+                    firestore.collection(CART_DB_NAME).add(safeCart).await()
+                    true
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    false
+                }
+            }
+        }
+        // SINGLE CART
+        return try {
+            if (cart.productos == null)
+                cart.productos = listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice))
+            else
+                cart.productos = cart.productos!! + listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice))
+            firestore.collection(CART_DB_NAME).document(cart.idFirebaseCarrito!!).set(cart, SetOptions.merge()).await()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    private suspend fun getCartAndDeleteOthersUserCarts(firebaseUserId: String): Carrito? {
+        return try {
+            val carts = firestore.collection(CART_DB_NAME).whereEqualTo(CART_USER_ID_DB_FIELD, firebaseUserId).get().await()
+            val firstCart = carts.documents.first()
+            carts.forEach {
+                firestore.collection(CART_DB_NAME).document(it.id).delete().await()
+            }
+            firstCart.toObject(Carrito::class.java)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
 }

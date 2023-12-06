@@ -2,10 +2,14 @@ package com.liike.liikegomi.main.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.liike.liikegomi.background.firebase_db.FirebaseUtils
 import com.liike.liikegomi.background.firebase_db.entities.Categoria
 import com.liike.liikegomi.background.firebase_db.entities.Productos
+import com.liike.liikegomi.background.shared_prefs.SharedPreferenceKeys
+import com.liike.liikegomi.background.shared_prefs.SharedPrefs
 import com.liike.liikegomi.base.viewmodel.BaseViewModel
+import kotlinx.coroutines.launch
 
 class MainViewModel: BaseViewModel() {
 
@@ -33,6 +37,22 @@ class MainViewModel: BaseViewModel() {
                 _productsList.value = products!!
             else
                 toastMessage.value = message
+        }
+    }
+
+    fun addToCart(producto: Productos) {
+        viewModelScope.launch {
+            progressMessage.value = "Añadiendo"
+            val firebaseUserId = SharedPrefs.string(SharedPreferenceKeys.USER_ID)
+            if (firebaseUserId == null) {
+                toastMessage.value = "El ID del usuario no es válido, reinicia tu sesión"
+            } else {
+                val wasAdded = FirebaseUtils.addProductToCart(firebaseUserId, producto, 1)
+                if (!wasAdded) {
+                    toastMessage.value = "El producto no pudo ser agregado al carrito"
+                }
+            }
+            progressMessage.value = null
         }
     }
 }

@@ -2,13 +2,15 @@ package com.liike.liikegomi.main.ui.fragments
 
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import com.liike.liikegomi.background.firebase_db.entities.Productos
 import com.liike.liikegomi.base.ui.BaseFragment
 import com.liike.liikegomi.databinding.FragmentProductMainBinding
+import com.liike.liikegomi.main.ui.adapters.AddCartItemCallback
 import com.liike.liikegomi.main.ui.adapters.ItemProductAdapter
 import com.liike.liikegomi.main.view_model.MainViewModel
 import com.liike.liikegomi.main.view_model.MainViewModelFactory
 
-class MainProductFragment(private val idCategory: Int) : BaseFragment<FragmentProductMainBinding>() {
+class MainProductFragment(private val idCategory: Int) : BaseFragment<FragmentProductMainBinding>(), AddCartItemCallback {
 
     private lateinit var mProductsAdapter: ItemProductAdapter
     private lateinit var mViewModel: MainViewModel
@@ -26,7 +28,7 @@ class MainProductFragment(private val idCategory: Int) : BaseFragment<FragmentPr
             ViewModelProvider(this, MainViewModelFactory())[MainViewModel::class.java]
         }
 
-        mProductsAdapter = ItemProductAdapter()
+        mProductsAdapter = ItemProductAdapter(this)
 
         mViewModel.mProductsList.observe(this.viewLifecycleOwner) {
             if (it.isEmpty()) {
@@ -45,6 +47,10 @@ class MainProductFragment(private val idCategory: Int) : BaseFragment<FragmentPr
         mBinding.recyclerViewProducts.adapter = mProductsAdapter
 
         mViewModel.getProductsByCategory(idCategory)
+    }
+
+    override fun addToCart(product: Productos) {
+        mViewModel.addToCart(product)
     }
 
 }
