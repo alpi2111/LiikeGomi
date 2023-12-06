@@ -55,4 +55,5 @@
     <string name="minus">Restar</string>
     <string name="pay">Pagar</string>
     <string name="total_">Total:</string>
+    <string name="no_items_on_cart">No tienes gomitas en tu carrito 😔</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.liike.liikegomi.background.firebase_db.entities
 
 
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
 
 class Carrito(
@@ -10,6 +11,9 @@ class Carrito(
     @get:PropertyName("productos")
     @set:PropertyName("productos")
     var productos: List<Producto?>?,
+    @get:Exclude
+    @set:Exclude
+    var idFirebaseCarrito: String?
 ) {
     class Producto(
         @get:PropertyName("cantidad")
@@ -25,5 +29,5 @@ class Carrito(
         constructor() : this(null, null, null)
     }
 
-    constructor() : this(null, null)
+    constructor() : this(null, null, null)
 }

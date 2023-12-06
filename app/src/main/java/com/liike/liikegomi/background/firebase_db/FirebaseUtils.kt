@@ -8,6 +8,8 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.toObject
 import com.liike.liikegomi.background.database.types.RolType
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.CART_DB_NAME
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.CART_USER_ID_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.CATEGORIES_DB_NAME
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.CATEGORY_ID_CATEGORY_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRODUCTS_DB_NAME
@@ -17,6 +19,7 @@ import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USERS_DB_NAM
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USER_EMAIL_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USER_TYPE_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USER_USERNAME_DB_FIELD
+import com.liike.liikegomi.background.firebase_db.entities.Carrito
 import com.liike.liikegomi.background.firebase_db.entities.Categoria
 import com.liike.liikegomi.background.firebase_db.entities.Productos
 import com.liike.liikegomi.background.firebase_db.entities.Usuarios
@@ -323,6 +326,20 @@ object FirebaseUtils {
         } catch (e: Exception) {
             Log.e("deleteProductError", e.message ?: "Unknown error")
             false
+        }
+    }
+
+    suspend fun getCartByUser(firebaseUserId: String): Carrito? {
+        val cartData = firestore.collection(CART_DB_NAME).whereEqualTo(CART_USER_ID_DB_FIELD, firebaseUserId).get().await()
+        if (cartData.documents.isEmpty()) {
+            return null
+        } else {
+            if (cartData.documents.size > 1) {
+                return Carrito()
+            }
+            val firstDocument = cartData.documents.first()
+            val firstCart = firstDocument.toObject(Carrito::class.java) ?: return Carrito()
+            return firstCart.apply { idFirebaseCarrito = firstDocument.id }
         }
     }
 
