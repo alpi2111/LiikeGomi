@@ -351,7 +351,7 @@ object FirebaseUtils {
         }
         if (cart == null) {
             // NO CART EXIST
-            productCart.productos = listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice))
+            productCart.productos = listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice, product.productImage))
             return try {
                 firestore.collection(CART_DB_NAME).add(productCart).await()
                 true
@@ -364,7 +364,7 @@ object FirebaseUtils {
             // THERE'S MORE THAN ONE CART
             val safeCart = getCartAndDeleteOthersUserCarts(firebaseUserId)
             if (safeCart == null) {
-                productCart.productos = listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice))
+                productCart.productos = listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice, product.productImage))
                 return try {
                     firestore.collection(CART_DB_NAME).add(productCart).await()
                     true
@@ -374,9 +374,9 @@ object FirebaseUtils {
                 }
             } else {
                 if (safeCart.productos == null)
-                    safeCart.productos = listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice))
+                    safeCart.productos = listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice, product.productImage))
                 else
-                    safeCart.productos = safeCart.productos!! + listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice))
+                    safeCart.productos = safeCart.productos!! + listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice, product.productImage))
                 return try {
                     firestore.collection(CART_DB_NAME).add(safeCart).await()
                     true
@@ -389,9 +389,9 @@ object FirebaseUtils {
         // SINGLE CART
         return try {
             if (cart.productos == null)
-                cart.productos = listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice))
+                cart.productos = listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice, product.productImage))
             else
-                cart.productos = cart.productos!! + listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice))
+                cart.productos = cart.productos!! + listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice, product.productImage))
             firestore.collection(CART_DB_NAME).document(cart.idFirebaseCarrito!!).set(cart, SetOptions.merge()).await()
             true
         } catch (e: Exception) {
@@ -420,4 +420,27 @@ object FirebaseUtils {
         return cart?.productos?.isEmpty() ?: true
     }
 
+    suspend fun updateCart(cart: Carrito): Boolean {
+        return try {
+            firestore.collection(CART_DB_NAME).document(cart.idFirebaseCarrito!!).set(cart, SetOptions.merge()).await()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    suspend fun deleteItemProductCart(cart: Carrito): Boolean {
+        return try {
+            val cartIsNowEmpty = cart.productos.isNullOrEmpty()
+            if (cartIsNowEmpty) {
+                firestore.collection(CART_DB_NAME).document(cart.idFirebaseCarrito!!).delete().await()
+            } else {
+                firestore.collection(CART_DB_NAME).document(cart.idFirebaseCarrito!!).set(cart, SetOptions.merge()).await()
+            }
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
 }

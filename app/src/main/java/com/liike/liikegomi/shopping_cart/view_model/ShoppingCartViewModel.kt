@@ -33,4 +33,33 @@ class ShoppingCartViewModel : BaseViewModel() {
     fun cartIsNotValid(cart: Carrito): Boolean {
         return cart.idFirebaseCarrito.isNullOrBlank() or cart.nombreUsuario.isNullOrBlank()
     }
+
+    fun updateCart(cart: Carrito) {
+        progressMessage.value = "Actualizando"
+        viewModelScope.launch {
+            val wasUpdated = FirebaseUtils.updateCart(cart)
+            if (wasUpdated) {
+                progressMessage.value = null
+            } else {
+                toastMessage.value = "No se pudo actualizar el carrito"
+                getShoppingCart()
+                progressMessage.value = null
+            }
+        }
+    }
+
+    fun deleteCartItemProduct(cart: Carrito) {
+        progressMessage.value = "Eliminando"
+        viewModelScope.launch {
+            val productsTemp = cart.productos?.toMutableList() ?: mutableListOf()
+            val emptyProducts = productsTemp.filter { it.cantidad!! <= 0 }
+            productsTemp.removeAll(emptyProducts)
+            cart.productos = productsTemp
+            val wasDeleted = FirebaseUtils.deleteItemProductCart(cart)
+            if (!wasDeleted)
+                toastMessage.value = "El producto no se pudo eliminar"
+            getShoppingCart()
+            progressMessage.value = null
+        }
+    }
 }
