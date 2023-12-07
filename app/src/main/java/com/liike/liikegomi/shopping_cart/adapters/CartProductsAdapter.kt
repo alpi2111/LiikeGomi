@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.liike.liikegomi.R
 import com.liike.liikegomi.background.firebase_db.entities.Carrito
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.databinding.ItemCartBinding
@@ -63,12 +64,12 @@ class CartProductsAdapter(private val callback: CartProductsCallback) : Recycler
                 productName.text = cartProduct.nombre
                 productPrice.text = "$${cartProduct.precioUnidad}"
                 itemCount.text = "${cartProduct.cantidad}"
-                val bytes = cartProduct.imagen?.toBytes()
-                if (bytes != null) {
+//                val bytes = cartProduct.imagen?.toBytes()
+//                if (bytes != null) {
                     productImage.setPadding(0, 0, 0, 0)
                     productImage.imageTintList = null
-                    Glide.with(itemView.context).load(bytes).centerCrop().into(productImage)
-                }
+                    Glide.with(itemView.context).load(R.drawable.ic_image_search).centerCrop().into(productImage)
+//                }
 
                 btnAdd.setOnClickListener {
                     callback.onUpdateCart(cartProduct.apply { cantidad = cantidad!! + 1 })

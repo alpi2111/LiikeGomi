@@ -1,7 +1,6 @@
 package com.liike.liikegomi.background.firebase_db.entities
 
 
-import com.google.firebase.firestore.Blob
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
 
@@ -29,11 +28,11 @@ class Carrito(
         @get:PropertyName("precio_unidad")
         @set:PropertyName("precio_unidad")
         var precioUnidad: Double?,
-        @get:PropertyName("imagen")
-        @set:PropertyName("imagen")
-        var imagen: Blob?,
+//        @get:PropertyName("imagen")
+//        @set:PropertyName("imagen")
+//        var imagen: Blob?,
     ) {
-        constructor() : this(null, null, null, null, null)
+        constructor() : this(null, null, null, null)
     }
 
     constructor() : this(null, null, null)
