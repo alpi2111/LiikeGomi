@@ -66,9 +66,9 @@ class CartProductsAdapter(private val callback: CartProductsCallback) : Recycler
                 itemCount.text = "${cartProduct.cantidad}"
 //                val bytes = cartProduct.imagen?.toBytes()
 //                if (bytes != null) {
-                    productImage.setPadding(0, 0, 0, 0)
-                    productImage.imageTintList = null
-                    Glide.with(itemView.context).load(R.drawable.ic_image_search).centerCrop().into(productImage)
+                productImage.setPadding(0, 0, 0, 0)
+                productImage.imageTintList = null
+                Glide.with(itemView.context).load(R.drawable.ic_image_search).centerCrop().into(productImage)
 //                }
 
                 btnAdd.setOnClickListener {
