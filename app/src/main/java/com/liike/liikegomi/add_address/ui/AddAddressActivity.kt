@@ -34,7 +34,7 @@ class AddAddressActivity: BaseActivity<ActivityAddAddressBinding, AddAddressView
         super.onCreate(savedInstanceState)
 
         mViewModel.mAddressAdded.observe(this) {
-            if (it.isNotEmpty()) {
+            if (it != null) {
                 val intent = Intent().apply {
                     putExtra(PaymentActivity.SELECTED_ADDRESS_KEY, it)
                 }

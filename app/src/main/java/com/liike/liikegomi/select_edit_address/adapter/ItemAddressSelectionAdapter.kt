@@ -54,6 +54,11 @@ class ItemAddressSelectionAdapter : RecyclerView.Adapter<ItemAddressSelectionAda
         return mList[selectedPosition]
     }
 
+    fun addAndSelectLastAddress(newAddress: Direcciones) {
+        mList.add(newAddress)
+        notifyItemInserted(mList.lastIndex)
+    }
+
     class ViewHolder private constructor(private val mBinding: ItemAddressBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
         fun bind(address: Direcciones, isSelected: Boolean, buttonSelectedCallback: RadioButtonSelectedCallback) {

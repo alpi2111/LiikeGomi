@@ -30,9 +30,9 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
             mBinding.btnCreate.isEnabled = false
             return@registerForActivityResult
         }
-        val address = result.data!!.getStringExtra(SELECTED_ADDRESS_KEY).toString()
-        Log.d("DATA", address)
-        mBinding.address.text = address
+        val address = result.data!!.getSerializableExtra(SELECTED_ADDRESS_KEY) as Direcciones
+        Log.d("DATA", address.formattedAddress())
+        mBinding.address.text = address.formattedAddress()
         mBinding.btnCreate.isEnabled = true
     }
 

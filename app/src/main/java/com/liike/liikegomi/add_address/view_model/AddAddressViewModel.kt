@@ -10,8 +10,8 @@ import kotlinx.coroutines.launch
 
 class AddAddressViewModel: BaseViewModel() {
 
-    private val _addressAdded = MutableLiveData<String>()
-    val mAddressAdded: LiveData<String> = _addressAdded
+    private val _addressAdded = MutableLiveData<Direcciones?>()
+    val mAddressAdded: LiveData<Direcciones?> = _addressAdded
 
     fun addAddress(address: Direcciones) {
         viewModelScope.launch {
@@ -19,9 +19,9 @@ class AddAddressViewModel: BaseViewModel() {
             val wasAdded = FirebaseUtils.addAddress(address)
             if (!wasAdded) {
                 toastMessage.value = "No se pudo agregar la dirección, intenta nuevamente"
-                _addressAdded.value = ""
+                _addressAdded.value = null
             } else {
-                _addressAdded.value = address.formattedAddress()
+                _addressAdded.value = address
             }
             progressMessage.value
         }
