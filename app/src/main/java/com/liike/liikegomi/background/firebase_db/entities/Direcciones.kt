@@ -40,6 +40,8 @@ class Direcciones(
 ) : FirebaseObjectInterface() {
     override fun toString(): String = calle
 
+    constructor() : this("", "", "", "", "", "", "", "", "")
+
     fun formattedAddress(): String {
         return "${calle.trim()} ${numExterior.trim()} ${numInterior.trim()} - ${colonia.trim()}; ${cp.trim()}, ${municipio.trim()}, ${estado.trim()}." +
                 "\nTeléfono: ${telefono.trim()} - Referencias: ${referencias.trim()}"

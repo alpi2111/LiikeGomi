@@ -21,6 +21,7 @@ import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USER_TYPE_DB
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USER_USERNAME_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.entities.Carrito
 import com.liike.liikegomi.background.firebase_db.entities.Categoria
+import com.liike.liikegomi.background.firebase_db.entities.Direcciones
 import com.liike.liikegomi.background.firebase_db.entities.Productos
 import com.liike.liikegomi.background.firebase_db.entities.Usuarios
 import com.liike.liikegomi.background.shared_prefs.SharedPreferenceKeys
@@ -440,6 +441,31 @@ object FirebaseUtils {
             }
             true
         } catch (e: Exception) {
+            false
+        }
+    }
+
+    suspend fun getUserAddress(): List<Direcciones> {
+        val firebaseUser = SharedPrefs.string(SharedPreferenceKeys.USER_ID)
+        return try {
+            val user = firestore.collection(USERS_DB_NAME).document(firebaseUser!!).get().await().toObject(Usuarios::class.java)
+            user!!.address ?: listOf()
+        } catch (e: Exception) {
+            listOf()
+        }
+    }
+
+    suspend fun addAddress(direction: Direcciones): Boolean {
+        val firebaseUser = SharedPrefs.string(SharedPreferenceKeys.USER_ID)
+        return try {
+            val user = firestore.collection(USERS_DB_NAME).document(firebaseUser!!).get().await().toObject(Usuarios::class.java)
+            val directions = user!!.address?.toMutableList() ?: mutableListOf()
+            directions.add(direction)
+            user.address = directions
+            firestore.collection(USERS_DB_NAME).document(firebaseUser).set(user, SetOptions.merge()).await()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
             false
         }
     }

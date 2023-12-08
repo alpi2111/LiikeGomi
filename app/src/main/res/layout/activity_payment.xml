@@ -16,9 +16,11 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/btn_create"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintWidth_percent="0.9">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -63,11 +65,13 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="6"
+                        android:text="SIN DIRECCIÓN"
                         android:textStyle="italic"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="@tools:sample/lorem/random" />
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_add_select_address"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -165,19 +169,23 @@
                         android:visibility="gone"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="@tools:sample/lorem/random" />
-
-                    <!--                    <com.google.android.material.button.MaterialButton-->
-                    <!--                        style="@style/Widget.Material3.Button.TextButton"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:text="Editar o elegir otra"-->
-                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
-                    <!--                        app:layout_constraintTop_toBottomOf="@id/payment_method" />-->
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_create"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:text="Realizar pedido"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.96"
+        app:layout_constraintWidth_percent="0.7" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

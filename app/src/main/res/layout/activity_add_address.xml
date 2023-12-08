@@ -16,6 +16,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="20dp"
+        android:elevation="4dp"
+        app:cardCornerRadius="8dp"
         app:layout_constraintBottom_toTopOf="@id/btn_create"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +92,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/il_price"
+                        android:id="@+id/il_interior_number"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -101,7 +103,7 @@
                         app:layout_constraintTop_toBottomOf="@id/il_exterior_number">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_price"
+                            android:id="@+id/et_interior_number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawablePadding="10dp"
@@ -118,7 +120,7 @@
                         android:hint="Colonia"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/il_price">
+                        app:layout_constraintTop_toBottomOf="@id/il_interior_number">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_colony"

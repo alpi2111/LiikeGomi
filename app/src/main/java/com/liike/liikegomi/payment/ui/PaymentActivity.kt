@@ -1,5 +1,6 @@
 package com.liike.liikegomi.payment.ui
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -9,22 +10,29 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.liike.liikegomi.add_address.ui.AddAddressActivity
+import com.liike.liikegomi.background.firebase_db.entities.Direcciones
 import com.liike.liikegomi.background.utils.ActivityUtils
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityPaymentBinding
 import com.liike.liikegomi.payment.view_model.PaymentViewModel
 import com.liike.liikegomi.payment.view_model.PaymentViewModelFactory
 
-class PaymentActivity: BaseActivity<ActivityPaymentBinding, PaymentViewModel>() {
+class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>() {
+
+    private var mAddressList: List<Direcciones> = listOf()
 
     private val addressLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode != Activity.RESULT_OK || result.data == null) {
             Log.e("NO_DATA", "NO_DATA_SELECTED_OR_CANCELED")
+            @SuppressLint("SetTextI18n")
+            mBinding.address.text = "SIN DIRECCIÓN"
+            mBinding.btnCreate.isEnabled = false
             return@registerForActivityResult
         }
         val address = result.data!!.getStringExtra(SELECTED_ADDRESS_KEY).toString()
         Log.d("DATA", address)
         mBinding.address.text = address
+        mBinding.btnCreate.isEnabled = true
     }
 
     companion object {
@@ -44,11 +52,28 @@ class PaymentActivity: BaseActivity<ActivityPaymentBinding, PaymentViewModel>() 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mViewModel.mUserAddresses.observe(this) { addresses ->
+            if (addresses.isEmpty()) {
+                AddAddressActivity.launchForResult(this, addressLauncher)
+                return@observe
+            }
+            mBinding.address.text = addresses.first().formattedAddress()
+            mAddressList = addresses
+        }
+
         mBinding.run {
             radioGroupPayment.setOnCheckedChangeListener { _, checkedId ->
                 val shouldShowTransferText = checkedId == radioButtonTransfer.id
                 transferText.isVisible = shouldShowTransferText
                 lyCopyButtons.isVisible = shouldShowTransferText
+            }
+
+            btnAddSelectAddress.setOnClickListener {
+                if (mAddressList.isEmpty())
+                    AddAddressActivity.launchForResult(this@PaymentActivity, addressLauncher)
+                else
+                    TODO("CALL THE ADDRESSES SELECTION")
             }
 
             btnCopyClabe.setOnClickListener {
@@ -59,6 +84,7 @@ class PaymentActivity: BaseActivity<ActivityPaymentBinding, PaymentViewModel>() 
                 ActivityUtils.copyToClipboard(this@PaymentActivity, "Telefono", "+527831280145")
             }
         }
-        AddAddressActivity.launchForResult(this, addressLauncher)
+
+        mViewModel.getUserAddresses()
     }
 }
