@@ -2,7 +2,10 @@ package com.liike.liikegomi.background.utils
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
 import android.text.InputType
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
@@ -81,5 +84,12 @@ object ActivityUtils {
 
     fun resetDatePickerDialogVisibility() {
         mIsDatePickerDialogOpen = false
+    }
+
+    fun copyToClipboard(activity: AppCompatActivity, label: String, text: String) {
+        val clipboard = activity.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText(label, text)
+        clipboard.setPrimaryClip(clip)
+        MessageUtils.toast(activity, "$label copiado al portapapeles")
     }
 }

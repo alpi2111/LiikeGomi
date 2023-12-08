@@ -56,4 +56,7 @@
     <string name="pay">Pagar</string>
     <string name="total_">Total:</string>
     <string name="no_items_on_cart">No tienes gomitas en tu carrito 😔</string>
+    <string name="payment">Pago</string>
+    <string name="address_shipping">Dirección de envío</string>
+    <string name="transfer_text">Haz tu transferencia a la cuenta CLABE:\n<b>1278 9901 3836 1702 14</b>.\nUna vez hayas realizado la transferencia envía tu comprobante al número:\n<b>+52 783 128 0145</b></string>
 </resources>
