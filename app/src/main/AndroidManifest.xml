@@ -73,6 +73,10 @@
         <activity
             android:name=".add_address.ui.AddAddressActivity"
             android:exported="true" />
+        <activity
+            android:name=".select_edit_address.ui.SelectEditAddressActivity"
+            android:exported="true" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

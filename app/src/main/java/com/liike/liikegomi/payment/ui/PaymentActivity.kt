@@ -16,6 +16,7 @@ import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityPaymentBinding
 import com.liike.liikegomi.payment.view_model.PaymentViewModel
 import com.liike.liikegomi.payment.view_model.PaymentViewModelFactory
+import com.liike.liikegomi.select_edit_address.ui.SelectEditAddressActivity
 
 class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>() {
 
@@ -73,7 +74,7 @@ class PaymentActivity : BaseActivity<ActivityPaymentBinding, PaymentViewModel>()
                 if (mAddressList.isEmpty())
                     AddAddressActivity.launchForResult(this@PaymentActivity, addressLauncher)
                 else
-                    TODO("CALL THE ADDRESSES SELECTION")
+                    SelectEditAddressActivity.launchForResult(this@PaymentActivity, addressLauncher, mAddressList)
             }
 
             btnCopyClabe.setOnClickListener {
