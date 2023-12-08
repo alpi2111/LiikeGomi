@@ -70,6 +70,9 @@
         <activity
             android:name=".payment.ui.PaymentActivity"
             android:exported="true" />
+        <activity
+            android:name=".add_address.ui.AddAddressActivity"
+            android:exported="true" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
