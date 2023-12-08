@@ -105,15 +105,14 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
 
     private fun allFieldsAreFilled(): Boolean {
         mBinding.run {
-            val errorMessage = "El campo es obligatorio"
-            return etName.isValid(ilName, errorMessage) and
-                    etLastName.isValid(ilLastName, errorMessage) and
-                    etUserName.isValid(ilUserName, errorMessage) and
-                    etEmail.isValid(ilEmail, errorMessage) and
-                    etBirthDate.isValid(ilBirthDate, errorMessage) and
-                    etNumber.isValid(ilNumber, errorMessage) and
-                    etPassword.isValid(ilPassword, errorMessage) and
-                    etPasswordRepeated.isValid(ilPasswordRepeated, errorMessage)
+            return etName.isValid(ilName) and
+                    etLastName.isValid(ilLastName) and
+                    etUserName.isValid(ilUserName) and
+                    etEmail.isValid(ilEmail) and
+                    etBirthDate.isValid(ilBirthDate) and
+                    etNumber.isValid(ilNumber) and
+                    etPassword.isValid(ilPassword) and
+                    etPasswordRepeated.isValid(ilPasswordRepeated)
         }
     }
 }
