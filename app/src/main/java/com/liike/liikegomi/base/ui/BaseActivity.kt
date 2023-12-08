@@ -26,7 +26,6 @@ import com.liike.liikegomi.base.viewmodel.BaseViewModel
 import com.liike.liikegomi.base.viewmodel.BaseViewModelFactory
 import com.liike.liikegomi.login.ui.LoginActivity
 import com.liike.liikegomi.main.ui.MainActivity
-import com.liike.liikegomi.payment.ui.PaymentActivity
 import com.liike.liikegomi.register.ui.RegisterActivity
 import com.liike.liikegomi.shopping_cart.ui.ShoppingCartActivity
 import kotlin.reflect.KClass
@@ -100,7 +99,6 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
                     R.id.nav_home -> launchActivityMenu(MainActivity::class) { MainActivity.launch(this) }
                     R.id.nav_close_session -> mViewModel.closeSession()
                     R.id.nav_my_purchases -> { MessageUtils.toast(this, "Mis compras seleccionada") }
-                    R.id.nav_profile -> { launchActivityMenu(PaymentActivity::class) { PaymentActivity.launch(this) } }
                     R.id.nav_admin_add_product -> launchActivityMenu(AddProductActivity::class) { AddProductActivity.launch(this) }
                     R.id.nav_admin_add_category -> launchActivityMenu(AddCategoryActivity::class) { AddCategoryActivity.launch(this) }
                     R.id.nav_admin_categories_list -> launchActivityMenu(AdminCategoryActivity::class) { AdminCategoryActivity.launch(this) }

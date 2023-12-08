@@ -10,6 +10,7 @@ import com.liike.liikegomi.background.firebase_db.entities.Carrito
 import com.liike.liikegomi.background.utils.MessageUtils
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivityShoppingCartBinding
+import com.liike.liikegomi.payment.ui.PaymentActivity
 import com.liike.liikegomi.shopping_cart.adapters.CartProductsAdapter
 import com.liike.liikegomi.shopping_cart.adapters.CartProductsCallback
 import com.liike.liikegomi.shopping_cart.view_model.ShoppingCartViewModel
@@ -82,6 +83,11 @@ class ShoppingCartActivity: BaseActivity<ActivityShoppingCartBinding, ShoppingCa
             mBinding.btnPay.isEnabled = true
             mBinding.btnPay.text = "Pagar (${cart.productos?.size ?: 0} producto(s))"
         }
+
+        mBinding.btnPay.setOnClickListener {
+            PaymentActivity.launch(this)
+        }
+
         mViewModel.getShoppingCart()
     }
 
