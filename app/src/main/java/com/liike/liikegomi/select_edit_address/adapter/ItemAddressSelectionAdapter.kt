@@ -50,6 +50,10 @@ class ItemAddressSelectionAdapter : RecyclerView.Adapter<ItemAddressSelectionAda
         notifyItemRangeInserted(0, currentSize)
     }
 
+    fun getSelectedAddress(): Direcciones {
+        return mList[selectedPosition]
+    }
+
     class ViewHolder private constructor(private val mBinding: ItemAddressBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
         fun bind(address: Direcciones, isSelected: Boolean, buttonSelectedCallback: RadioButtonSelectedCallback) {
