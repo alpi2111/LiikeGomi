@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.navigation.NavigationView
 import com.liike.liikegomi.R
+import com.liike.liikegomi.add_address.ui.AddAddressActivity
 import com.liike.liikegomi.add_category.ui.AddCategoryActivity
 import com.liike.liikegomi.add_product.ui.AddProductActivity
 import com.liike.liikegomi.administrate_category.ui.AdminCategoryActivity
@@ -26,7 +27,9 @@ import com.liike.liikegomi.base.viewmodel.BaseViewModel
 import com.liike.liikegomi.base.viewmodel.BaseViewModelFactory
 import com.liike.liikegomi.login.ui.LoginActivity
 import com.liike.liikegomi.main.ui.MainActivity
+import com.liike.liikegomi.payment.ui.PaymentActivity
 import com.liike.liikegomi.register.ui.RegisterActivity
+import com.liike.liikegomi.select_edit_address.ui.SelectEditAddressActivity
 import com.liike.liikegomi.shopping_cart.ui.ShoppingCartActivity
 import kotlin.reflect.KClass
 
@@ -184,6 +187,9 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
     }
 
     private fun isShoppingCartView(): Boolean {
-        return this is ShoppingCartActivity
+        return when (this) {
+            is ShoppingCartActivity, is PaymentActivity, is SelectEditAddressActivity, is AddAddressActivity -> true
+            else -> false
+        }
     }
 }
