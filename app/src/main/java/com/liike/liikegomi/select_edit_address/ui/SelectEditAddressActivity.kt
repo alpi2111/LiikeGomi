@@ -7,10 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.liike.liikegomi.background.firebase_db.entities.Direcciones
 import com.liike.liikegomi.base.ui.BaseActivity
 import com.liike.liikegomi.databinding.ActivitySelectEditAddressBinding
+import com.liike.liikegomi.select_edit_address.adapter.ItemAddressSelectionAdapter
 import com.liike.liikegomi.select_edit_address.view_model.SelectEditAddressViewModel
 import com.liike.liikegomi.select_edit_address.view_model.SelectEditAddressViewModelFactory
 
 class SelectEditAddressActivity: BaseActivity<ActivitySelectEditAddressBinding, SelectEditAddressViewModel>() {
+
+    private lateinit var mAddressAdapter: ItemAddressSelectionAdapter
 
     companion object {
         private const val ADDRESS_LIST_KEY = "addressListKey"
@@ -32,5 +35,9 @@ class SelectEditAddressActivity: BaseActivity<ActivitySelectEditAddressBinding, 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val addressList = (intent.getSerializableExtra(ADDRESS_LIST_KEY) as Array<Direcciones>).toList()
+
+        mAddressAdapter = ItemAddressSelectionAdapter()
+        mBinding.recyclerAddress.adapter = mAddressAdapter
+        mAddressAdapter.setData(addressList)
     }
 }

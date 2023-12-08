@@ -2,6 +2,7 @@ package com.liike.liikegomi.background.firebase_db.entities
 
 import com.google.firebase.firestore.PropertyName
 import com.liike.liikegomi.background.firebase_db.base.FirebaseObjectInterface
+import java.io.Serializable
 
 class Direcciones(
 //    @get:PropertyName("direccion")
@@ -37,7 +38,7 @@ class Direcciones(
 //    @get:PropertyName("id_direccion")
 //    @set:PropertyName("id_direccion")
 //    var idDireccion: Int = 0,
-) : FirebaseObjectInterface() {
+) : FirebaseObjectInterface(), Serializable {
     override fun toString(): String = calle
 
     constructor() : this("", "", "", "", "", "", "", "", "")
