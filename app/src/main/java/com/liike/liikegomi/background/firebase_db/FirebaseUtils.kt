@@ -391,8 +391,18 @@ object FirebaseUtils {
         return try {
             if (cart.productos == null)
                 cart.productos = listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice/*, product.productImage*/))
-            else
-                cart.productos = cart.productos!! + listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice/*, product.productImage*/))
+            else {
+                val indexOfCurrentProduct = cart.productos!!.indexOfFirst { it.idProducto == product.productId }
+                if (indexOfCurrentProduct != -1) {
+                    val products = cart.productos!!.toMutableList()
+                    val np = products[indexOfCurrentProduct]
+                    np.cantidad = np.cantidad!! + quantity
+                    products[indexOfCurrentProduct] = np
+                    cart.productos = products
+                } else {
+                    cart.productos = cart.productos!! + listOf(Carrito.Producto(product.productName, quantity, product.productId, product.productPrice/*, product.productImage*/))
+                }
+            }
             firestore.collection(CART_DB_NAME).document(cart.idFirebaseCarrito!!).set(cart, SetOptions.merge()).await()
             true
         } catch (e: Exception) {
