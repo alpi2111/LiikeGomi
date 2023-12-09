@@ -12,6 +12,9 @@ import com.liike.liikegomi.background.firebase_db.FirebaseConstants.CART_DB_NAME
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.CART_USER_ID_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.CATEGORIES_DB_NAME
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.CATEGORY_ID_CATEGORY_DB_FIELD
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.HELPERS_DB_NAME
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRIVACY_TERMS_DB_DOCUMENT
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRIVACY_TERMS_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRODUCTS_DB_NAME
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRODUCT_ID_CATEGORY_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRODUCT_ID_PRODUCT_DB_FIELD
@@ -478,5 +481,10 @@ object FirebaseUtils {
             e.printStackTrace()
             false
         }
+    }
+
+    suspend fun getPrivacyTerms(): String {
+        val data = firestore.collection(HELPERS_DB_NAME).document(PRIVACY_TERMS_DB_DOCUMENT).get().await()
+        return data.get(PRIVACY_TERMS_DB_FIELD).toString()
     }
 }

@@ -58,4 +58,8 @@ class RegisterViewModel: BaseViewModel() {
             toastMessage.value = "Cuenta creada"
         }
     }
+
+    suspend fun getPrivacyTerms(): String {
+        return FirebaseUtils.getPrivacyTerms()
+    }
 }

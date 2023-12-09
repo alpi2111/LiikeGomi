@@ -3,8 +3,10 @@ package com.liike.liikegomi.register.ui
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputFilter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.lifecycleScope
 import com.liike.liikegomi.background.firebase_db.entities.Usuarios
 import com.liike.liikegomi.background.utils.ActivityUtils
 import com.liike.liikegomi.background.utils.DateUtils
@@ -16,6 +18,7 @@ import com.liike.liikegomi.isValid
 import com.liike.liikegomi.register.view_model.RegisterViewModel
 import com.liike.liikegomi.register.view_model.RegisterViewModelFactory
 import com.liike.liikegomi.text
+import kotlinx.coroutines.launch
 
 class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel>() {
 
@@ -51,17 +54,31 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding, RegisterViewModel
                 MessageUtils.toast(this, "Las contraseñas no coinciden")
                 return@setOnClickListener
             }
-            mBinding.run {
-                val user = Usuarios(
-                    name = etName.text(),
-                    lastName = etLastName.text(),
-                    password = etPassword.text(),
-                    email = etEmail.text(),
-                    userName = etUserName.text(),
-                    birthDay = DateUtils.getCurrentTimestampFormatted(),
-                    phoneNumber = etNumber.text()
+            lifecycleScope.launch {
+                val privacyTerms = mViewModel.getPrivacyTerms()
+                MessageUtils.dialog(
+                    context = this@RegisterActivity,
+                    title = "Aviso de privacidad",
+                    message = privacyTerms,
+                    okButton = "Aceptar",
+                    cancelButton = "Rechazar",
+                    onOkAction = {
+                        val user = Usuarios()
+                        mBinding.run {
+                            user.name = etName.text()
+                            user.lastName = etLastName.text()
+                            user.password = etPassword.text()
+                            user.email = etEmail.text()
+                            user.userName = etUserName.text()
+                            user.birthDay = DateUtils.getCurrentTimestampFormatted()
+                            user.phoneNumber = etNumber.text()
+                        }
+                        mViewModel.saveUser(this@RegisterActivity, user)
+                    },
+                    onCancelAction = {
+                        MessageUtils.toast(this@RegisterActivity, "Rechazaste el aviso de privacidad, no creamos la cuenta", Toast.LENGTH_LONG)
+                    }
                 )
-                mViewModel.saveUser(this@RegisterActivity, user)
             }
         }
 
