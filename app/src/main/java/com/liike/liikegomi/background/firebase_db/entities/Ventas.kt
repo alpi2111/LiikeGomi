@@ -30,7 +30,7 @@ class Ventas(
     var paymentType: PaymentType
 ) : FirebaseObjectInterface() {
     @get:PropertyName("tipo_pago")
-    @set:PropertyName("tipo_pado")
+    @set:PropertyName("tipo_pago")
     var tipoPago: String = paymentType.value
 
     override fun toString(): String = "${
