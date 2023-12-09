@@ -6,6 +6,7 @@ object FirebaseConstants {
     const val CATEGORIES_DB_NAME = "categorias"
     const val CART_DB_NAME = "carrito"
     const val HELPERS_DB_NAME = "helpers"
+    const val SELLS_DB_NAME = "ventas"
     const val USER_USERNAME_DB_FIELD = "nombre_usuario"
     const val USER_EMAIL_DB_FIELD = "correo"
     const val USER_TYPE_DB_FIELD = "type"

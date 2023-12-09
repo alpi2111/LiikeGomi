@@ -22,6 +22,8 @@ class ShoppingCartActivity: BaseActivity<ActivityShoppingCartBinding, ShoppingCa
     private var mCart: Carrito? = null
 
     companion object {
+        const val SHOPPING_CART_KEY = "shoppingCartKey"
+        const val SHOPPING_CART_ID_KEY = "shoppingCartIdKey"
         fun launch(appCompatActivity: AppCompatActivity) {
             val intent = Intent(appCompatActivity, ShoppingCartActivity::class.java)
             appCompatActivity.startActivity(intent)
@@ -85,7 +87,7 @@ class ShoppingCartActivity: BaseActivity<ActivityShoppingCartBinding, ShoppingCa
         }
 
         mBinding.btnPay.setOnClickListener {
-            PaymentActivity.launch(this)
+            PaymentActivity.launch(this, mCart!!.idFirebaseCarrito!!, mCart!!.productos!!)
         }
 
         mViewModel.getShoppingCart()

@@ -18,15 +18,12 @@ import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRIVACY_TERM
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRODUCTS_DB_NAME
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRODUCT_ID_CATEGORY_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRODUCT_ID_PRODUCT_DB_FIELD
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.SELLS_DB_NAME
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USERS_DB_NAME
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USER_EMAIL_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USER_TYPE_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USER_USERNAME_DB_FIELD
-import com.liike.liikegomi.background.firebase_db.entities.Carrito
-import com.liike.liikegomi.background.firebase_db.entities.Categoria
-import com.liike.liikegomi.background.firebase_db.entities.Direcciones
-import com.liike.liikegomi.background.firebase_db.entities.Productos
-import com.liike.liikegomi.background.firebase_db.entities.Usuarios
+import com.liike.liikegomi.background.firebase_db.entities.*
 import com.liike.liikegomi.background.shared_prefs.SharedPreferenceKeys
 import com.liike.liikegomi.background.shared_prefs.SharedPrefs
 import com.liike.liikegomi.background.utils.CryptUtils
@@ -487,4 +484,35 @@ object FirebaseUtils {
         val data = firestore.collection(HELPERS_DB_NAME).document(PRIVACY_TERMS_DB_DOCUMENT).get().await()
         return data.get(PRIVACY_TERMS_DB_FIELD).toString()
     }
+
+    suspend fun addSell(sell: Ventas): Boolean {
+        return try {
+            firestore.collection(SELLS_DB_NAME).add(sell).await()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    suspend fun deleteCart(carrito: Carrito): Boolean {
+        return try {
+            firestore.collection(CART_DB_NAME).document(carrito.idFirebaseCarrito!!).delete().await()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    suspend fun deleteCart(cartId: String): Boolean {
+        return try {
+            firestore.collection(CART_DB_NAME).document(cartId).delete().await()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
 }

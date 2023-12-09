@@ -3,6 +3,7 @@ package com.liike.liikegomi.background.firebase_db.entities
 
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
+import java.io.Serializable
 
 class Carrito(
     @get:PropertyName("nombre_usuario")
@@ -14,7 +15,7 @@ class Carrito(
     @get:Exclude
     @set:Exclude
     var idFirebaseCarrito: String?
-) {
+): Serializable {
     class Producto(
         @get:PropertyName("nombre")
         @set:PropertyName("nombre")
@@ -31,7 +32,7 @@ class Carrito(
 //        @get:PropertyName("imagen")
 //        @set:PropertyName("imagen")
 //        var imagen: Blob?,
-    ) {
+    ): Serializable {
         constructor() : this(null, null, null, null)
     }
 

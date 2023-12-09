@@ -3,6 +3,7 @@ package com.liike.liikegomi.background.utils
 import android.app.AlertDialog
 import android.content.Context
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.fragment.app.FragmentManager
 import com.liike.liikegomi.background.utils.ui.ProgressDialog
 
@@ -38,6 +39,7 @@ object MessageUtils {
                 }
             }
             AlertDialog.Builder(context).also { dialog ->
+                dialog.setCancelable(false)
                 dialog.setTitle(title)
                 dialog.setMessage(message)
                 dialog.setPositiveButton(okButton) { dialogInterface, _ ->
@@ -72,5 +74,53 @@ object MessageUtils {
             }
         }
     }
+
+    fun dialogWithIcon(context: Context, title: String, message: String, @DrawableRes icon: Int, okButton: String, onAction: () -> Unit) {
+        synchronized(lock) {
+            mAlertDialog.let {
+                if (it != null && it.isShowing) {
+                    it.dismiss()
+                }
+            }
+            AlertDialog.Builder(context).also { dialog ->
+                dialog.setCancelable(false)
+                dialog.setTitle(title)
+                dialog.setMessage(message)
+                dialog.setIcon(icon)
+                dialog.setPositiveButton(okButton) { dialogInterface, _ ->
+                    onAction.invoke()
+                    dialogInterface.dismiss()
+                }
+                mAlertDialog = dialog.show()
+            }
+        }
+    }
+
+    fun dialogWithIcon(context: Context, title: String, message: String, @DrawableRes icon: Int, okButton: String, cancelButton: String, onOkAction: () -> Unit, onCancelAction: () -> Unit) {
+        synchronized(lock) {
+            mAlertDialog.let {
+                if (it != null && it.isShowing) {
+                    it.dismiss()
+                }
+            }
+            AlertDialog.Builder(context).also { dialog ->
+                dialog.setCancelable(false)
+                dialog.setTitle(title)
+                dialog.setMessage(message)
+                dialog.setIcon(icon)
+                dialog.setPositiveButton(okButton) { dialogInterface, _ ->
+                    onOkAction.invoke()
+                    dialogInterface.dismiss()
+                }
+                dialog.setNegativeButton(cancelButton) { dialogInterface, _ ->
+                    onCancelAction.invoke()
+                    dialogInterface.dismiss()
+                }
+                mAlertDialog = dialog.show()
+            }
+        }
+    }
+
+
 
 }
