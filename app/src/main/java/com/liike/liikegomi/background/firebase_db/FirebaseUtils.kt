@@ -19,6 +19,8 @@ import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRODUCTS_DB_
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRODUCT_ID_CATEGORY_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.PRODUCT_ID_PRODUCT_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.SELLS_DB_NAME
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.SELL_DATE_DB_FIELD
+import com.liike.liikegomi.background.firebase_db.FirebaseConstants.SELL_ID_USER_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USERS_DB_NAME
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USER_EMAIL_DB_FIELD
 import com.liike.liikegomi.background.firebase_db.FirebaseConstants.USER_TYPE_DB_FIELD
@@ -512,6 +514,21 @@ object FirebaseUtils {
         } catch (e: Exception) {
             e.printStackTrace()
             false
+        }
+    }
+
+    suspend fun getPurchasesByUserId(userId: String): List<Ventas>? {
+        return try {
+            val documents = firestore.collection(SELLS_DB_NAME).whereEqualTo(SELL_ID_USER_DB_FIELD, userId).orderBy(SELL_DATE_DB_FIELD, Query.Direction.DESCENDING).get().await()
+            val listPurchases: MutableList<Ventas> = mutableListOf()
+            documents.documents.forEach {
+                val venta = it.toObject(Ventas::class.java)!!
+                listPurchases.add(venta)
+            }
+            listPurchases
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 

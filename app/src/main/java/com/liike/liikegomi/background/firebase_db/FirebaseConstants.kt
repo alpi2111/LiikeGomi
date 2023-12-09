@@ -16,4 +16,6 @@ object FirebaseConstants {
     const val CART_USER_ID_DB_FIELD = "nombre_usuario"
     const val PRIVACY_TERMS_DB_DOCUMENT = "aviso"
     const val PRIVACY_TERMS_DB_FIELD = "texto"
+    const val SELL_ID_USER_DB_FIELD = "id_usuario"
+    const val SELL_DATE_DB_FIELD = "fecha_compra"
 }
