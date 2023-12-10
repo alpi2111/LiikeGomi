@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.liike.liikegomi.background.database.Dao
 import com.liike.liikegomi.background.firebase_db.FirebaseUtils
 import com.liike.liikegomi.background.firebase_db.entities.Usuarios
+import com.liike.liikegomi.background.utils.CryptUtils
 import com.liike.liikegomi.background.utils.RandomUtils
 import com.liike.liikegomi.base.viewmodel.BaseViewModel
 import kotlinx.coroutines.cancel
@@ -28,6 +29,11 @@ class RegisterViewModel: BaseViewModel() {
                     toastMessage.value = message
                     return@userCanCreateAnAccount
                 }
+                user.password = CryptUtils.encrypt(user.password)
+                user.userName = CryptUtils.encrypt(user.userName)
+                user.email = CryptUtils.encrypt(user.email)
+                user.isActive = true
+                user.isLogged = false
                 FirebaseUtils.saveUser(activity, user) { wasSaved ->
                     progressMessage.value = null
                     if (wasSaved) {
