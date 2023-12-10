@@ -59,4 +59,5 @@
     <string name="payment">Pago</string>
     <string name="address_shipping">Dirección de envío</string>
     <string name="transfer_text">Haz tu transferencia a la cuenta CLABE:\n<b>1278 9901 3836 1702 14</b>.\nUna vez hayas realizado la transferencia envía tu comprobante al número:\n<b>+52 783 128 0145</b></string>
+    <string name="contact">Contacto</string>
 </resources>

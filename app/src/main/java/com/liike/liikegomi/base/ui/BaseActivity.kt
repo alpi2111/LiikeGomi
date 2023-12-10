@@ -1,6 +1,8 @@
 package com.liike.liikegomi.base.ui
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -135,6 +137,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
             return false
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         val cart = menu?.findItem(R.id.shopping_cart)
+        val contact = menu?.findItem(R.id.contact)
         if (mIsCartEmpty) {
             cart?.icon = mDrawableShoppingCart
         } else {
@@ -142,6 +145,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
         }
         val isUserAdmin = SharedPrefs.bool(SharedPreferenceKeys.USER_IS_ADMIN)
         cart?.isVisible = !isUserAdmin
+        contact?.isVisible = !isUserAdmin
         if (isShoppingCartView())
             cart?.isVisible = false
         return true
@@ -158,6 +162,13 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
             }
             R.id.nav_home -> {
                 mDrawer?.closeDrawers()
+                true
+            }
+            R.id.contact -> {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse("https://wa.me/+5217821300490")
+                }
+                startActivity(intent)
                 true
             }
             else -> {
