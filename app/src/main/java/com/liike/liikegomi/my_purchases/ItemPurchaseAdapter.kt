@@ -3,48 +3,65 @@ package com.liike.liikegomi.my_purchases
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.liike.liikegomi.background.firebase_db.entities.Usuarios
 import com.liike.liikegomi.background.firebase_db.entities.Ventas
+import com.liike.liikegomi.background.utils.CryptUtils
 import com.liike.liikegomi.background.utils.DateUtils
 import com.liike.liikegomi.databinding.ItemPurchaseBinding
 import com.liike.liikegomi.my_purchases.ui.components.ItemPurchaseDetail
 import java.util.Date
 
-class ItemPurchaseAdapter : RecyclerView.Adapter<ItemPurchaseAdapter.ViewHolder>() {
+class ItemPurchaseAdapter(private val mComesFromAdmin: Boolean) : RecyclerView.Adapter<ItemPurchaseAdapter.ViewHolder>() {
 
-    private val mList: MutableList<Pair<Date, List<Ventas>>> = mutableListOf()
+    private val mListUser: MutableList<Pair<Date, List<Ventas>>> = mutableListOf()
+    private val mListAdmin: MutableList<Pair<Date, List<Pair<Usuarios, Ventas>>>> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.createViewHolder(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(mList[position])
+        if (mComesFromAdmin)
+            holder.bindAdmin(mListAdmin[position])
+        else
+            holder.bindUser(mListUser[position])
     }
 
-    override fun getItemCount(): Int = mList.size
+    override fun getItemCount(): Int {
+        return if (mComesFromAdmin)
+            mListAdmin.size
+        else
+            mListUser.size
+    }
 
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getItemViewType(position: Int): Int = position
 
-    fun setData(newList: Map<Date, List<Ventas>>) {
+    fun setDataUser(newList: Map<Date, List<Ventas>>) {
         val currentSize = itemCount
-        mList.clear()
+        mListUser.clear()
         newList.map {
-            mList.add(it.key to it.value)
+            mListUser.add(it.key to it.value)
         }
-//        newList.reduce { key, a, element ->
-//            Log.d("reduce", "$key ($a - $element)")
-//            mList.add(key to element)
-//            element
-//        }
         notifyItemRangeRemoved(0, currentSize)
         notifyItemRangeInserted(0, itemCount)
     }
 
+    fun setDataAdmin(newList: Map<Date, List<Pair<Usuarios, Ventas>>>) {
+        val currentSize = itemCount
+        mListAdmin.clear()
+        newList.map { (date, list) ->
+            mListAdmin.add(date to list)
+        }
+        notifyItemRangeRemoved(0, currentSize)
+        notifyItemRangeInserted(0, itemCount)
+    }
+
+
     class ViewHolder private constructor(val mBinding: ItemPurchaseBinding) : RecyclerView.ViewHolder(mBinding.root) {
 
-        fun bind(item: Pair<Date, List<Ventas>>) {
+        fun bindUser(item: Pair<Date, List<Ventas>>) {
             val (date, venta) = item
             mBinding.run {
                 purchaseDate.text = DateUtils.getFormattedDateAsString(date)
@@ -57,8 +74,23 @@ class ItemPurchaseAdapter : RecyclerView.Adapter<ItemPurchaseAdapter.ViewHolder>
                     }
                 }
                 layoutItems.requestLayout()
-//                venta.listaProductos.forEach {
-//                }
+            }
+        }
+
+        fun bindAdmin(item: Pair<Date, List<Pair<Usuarios, Ventas>>>) {
+            val (date, venta) = item
+            mBinding.run {
+                purchaseDate.text = DateUtils.getFormattedDateAsString(date)
+                venta.forEach { (user, sell) ->
+                    sell.listaProductos.forEach { producto ->
+                        val newItem = ItemPurchaseDetail(itemView.context).apply {
+                            val fullUserName = "${user.name} ${user.lastName} - ${CryptUtils.decrypt(user.email)}"
+                            setData(producto.nombre!!, (producto.cantidad!! * producto.precioUnidad!!), producto.cantidad!!, fullUserName)
+                        }
+                        layoutItems.addView(newItem)
+                    }
+                }
+                layoutItems.requestLayout()
             }
         }
 

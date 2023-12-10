@@ -14,8 +14,11 @@ class MyPurchasesActivity: BaseActivity<ActivityMyPurchasesBinding, MyPurchasesV
     private lateinit var mPurchasesAdapter: ItemPurchaseAdapter
 
     companion object {
-        fun launch(appCompatActivity: AppCompatActivity) {
-            val intent = Intent(appCompatActivity, MyPurchasesActivity::class.java)
+        const val MY_PURCHASES_ADMIN_VIEW_KEY = "comesFromAdminView"
+        fun launch(appCompatActivity: AppCompatActivity, comesFromAdminView: Boolean) {
+            val intent = Intent(appCompatActivity, MyPurchasesActivity::class.java).apply {
+                putExtra(MY_PURCHASES_ADMIN_VIEW_KEY, comesFromAdminView)
+            }
             appCompatActivity.startActivity(intent)
         }
     }
@@ -30,25 +33,26 @@ class MyPurchasesActivity: BaseActivity<ActivityMyPurchasesBinding, MyPurchasesV
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mPurchasesAdapter = ItemPurchaseAdapter()
+        val comesFromAdminView = intent.getBooleanExtra(MY_PURCHASES_ADMIN_VIEW_KEY, false)
+        if (comesFromAdminView) {
+            mBinding.toolbar.title = "Mis ventas"
+        }
+        mPurchasesAdapter = ItemPurchaseAdapter(comesFromAdminView)
         mBinding.recyclerPurchases.adapter = mPurchasesAdapter
 
-        mViewModel.mPurchasesGrouped.observe(this) {
-//            Log.d("count", it.eachCount().toString())
-//            val map = it.fold(0) { accumulator, element ->
-//                Log.d("fold", "($accumulator - ${element.fechaCompra.toDate()})")
-//                accumulator
-//            }
-//            println(map)
-//            it.reduce { key, a, element ->
-//                Log.d("reduce", "$key ($a - $element)")
-////                mList.add(key to element)
-//                Ventas()
-//            }
-            mPurchasesAdapter.setData(it)
+        mViewModel.mAllPurchases.observe(this) {
+            mPurchasesAdapter.setDataAdmin(it)
         }
 
-        mViewModel.getMyPurchases()
+        mViewModel.mPurchasesGrouped.observe(this) {
+            mPurchasesAdapter.setDataUser(it)
+        }
+
+        if (comesFromAdminView) {
+            mViewModel.getAllPurchases()
+        } else {
+            mViewModel.getMyPurchases()
+        }
     }
 
 }

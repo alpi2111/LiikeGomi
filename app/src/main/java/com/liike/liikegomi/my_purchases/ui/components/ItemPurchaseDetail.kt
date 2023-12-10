@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import com.liike.liikegomi.databinding.ItemPurchaseDetailBinding
 
 class ItemPurchaseDetail @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ConstraintLayout(context, attrs) {
@@ -16,11 +17,15 @@ class ItemPurchaseDetail @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     @SuppressLint("SetTextI18n")
-    fun setData(name: String, totalPayed: Double, quantity: Int) {
+    fun setData(name: String, totalPayed: Double, quantity: Int, purchaseNameStr: String? = null) {
         mBinding.run {
             productName.text = name
             productQuantity.text = "Cantidad: $quantity"
             total.text = "Total pagado: $totalPayed"
+            if (purchaseNameStr != null) {
+                purchaseName.text = "Comprador: $purchaseNameStr"
+                purchaseName.isVisible = true
+            }
         }
     }
 }

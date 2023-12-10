@@ -532,4 +532,31 @@ object FirebaseUtils {
         }
     }
 
+    suspend fun getUserInfoById(firebaseId: String): Usuarios? {
+        return try {
+            val snapshot = firestore.collection(USERS_DB_NAME).document(firebaseId).get().await()
+            snapshot.toObject(Usuarios::class.java)!!
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    suspend fun getAllPurchases(): List<Pair<Usuarios, Ventas>>? {
+        return try {
+            val list = mutableListOf<Pair<Usuarios, Ventas>>()
+            val snapshot = firestore.collection(SELLS_DB_NAME).orderBy(SELL_DATE_DB_FIELD, Query.Direction.DESCENDING).get().await()
+            snapshot.documents.forEach {
+                val sell = it.toObject(Ventas::class.java)!!
+                val user = getUserInfoById(sell.idUsuario)
+                if (user != null)
+                    list.add(user to sell)
+            }
+            list
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
 }

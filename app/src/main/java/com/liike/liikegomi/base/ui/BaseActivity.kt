@@ -102,11 +102,12 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
                     // TODO: ADD OTHER MENU ITEMS
                     R.id.nav_home -> launchActivityMenu(MainActivity::class) { MainActivity.launch(this) }
                     R.id.nav_close_session -> mViewModel.closeSession()
-                    R.id.nav_my_purchases -> launchActivityMenu(MyPurchasesActivity::class) { MyPurchasesActivity.launch(this) }
+                    R.id.nav_my_purchases -> launchActivityMenu(MyPurchasesActivity::class) { MyPurchasesActivity.launch(this, comesFromAdminView = false) }
                     R.id.nav_admin_add_product -> launchActivityMenu(AddProductActivity::class) { AddProductActivity.launch(this) }
                     R.id.nav_admin_add_category -> launchActivityMenu(AddCategoryActivity::class) { AddCategoryActivity.launch(this) }
                     R.id.nav_admin_categories_list -> launchActivityMenu(AdminCategoryActivity::class) { AdminCategoryActivity.launch(this) }
                     R.id.nav_admin_products_list -> launchActivityMenu(AdminProductsActivity::class) { AdminProductsActivity.launch(this) }
+                    R.id.nav_admin_purchases_list -> launchActivityMenu(MyPurchasesActivity::class) { MyPurchasesActivity.launch(this, comesFromAdminView = true) }
                 }
                 true
             }
