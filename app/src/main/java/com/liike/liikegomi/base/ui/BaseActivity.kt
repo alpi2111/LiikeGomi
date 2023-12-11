@@ -158,7 +158,11 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 0x111) {
-            val allPermissionsAreGranted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
+            val allPermissionsAreGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                grantResults.any { it == PackageManager.PERMISSION_GRANTED }
+            } else {
+                grantResults.all { it == PackageManager.PERMISSION_GRANTED }
+            }
             if (!allPermissionsAreGranted) {
                 MessageUtils.toast(this, "El permiso es necesario, la app se cerrará en 2 segundos...")
                 lifecycleScope.launch {
