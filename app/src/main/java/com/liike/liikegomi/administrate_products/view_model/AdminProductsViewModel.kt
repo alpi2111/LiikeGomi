@@ -15,7 +15,7 @@ class AdminProductsViewModel: BaseViewModel() {
     val mCategoriesList: LiveData<List<Categoria>> = _categoriesList
     private val _productsList = MutableLiveData<List<Productos>>()
     val mProductsList: LiveData<List<Productos>> = _productsList
-    private val mImageBytesList: MutableList<ByteArray?> = mutableListOf()
+    private val mImageBytesList: MutableList<Pair<Int, ByteArray?>> = mutableListOf()
     private val _indexProductDeleted = MutableLiveData<Int>()
     val mIndexProductDeleted: LiveData<Int> = _indexProductDeleted
 
@@ -41,31 +41,37 @@ class AdminProductsViewModel: BaseViewModel() {
         }
     }
 
-    fun notifyImageBytesWithIndex(imageBytes: ByteArray?, position: Int) {
+    fun notifyImageBytesWithIndex(imageBytes: ByteArray?, idProduct: Int) {
         try {
-            mImageBytesList[position] = imageBytes
+            val position = mImageBytesList.indexOfFirst { (id, _) -> id == idProduct }
+            if (position != -1) {
+                val item = mImageBytesList[position]
+                mImageBytesList[position] = item.first to imageBytes
+            } else {
+                mImageBytesList.add(idProduct to imageBytes)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
-            mImageBytesList.add(position, imageBytes)
+            mImageBytesList.add(idProduct to imageBytes)
         }
     }
 
-    fun getImageBytesByPosition(position: Int): ByteArray? {
+    fun getImageBytesByProductId(idProduct: Int): ByteArray? {
         return try {
-            mImageBytesList[position]
+            mImageBytesList.first { (id, _) -> id == idProduct }.second
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
     }
 
-    fun deleteProduct(product: Productos, position: Int) {
+    fun deleteProduct(product: Productos) {
         viewModelScope.launch {
             progressMessage.value = "Eliminando producto"
             val wasDeleted = FirebaseUtils.deleteProduct(product)
             progressMessage.value = null
             if (wasDeleted)
-                _indexProductDeleted.value = position
+                _indexProductDeleted.value = product.productId
             else
                 toastMessage.value = "Ocurrió un error al eliminar el producto"
         }

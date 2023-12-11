@@ -1,5 +1,6 @@
 package com.liike.liikegomi.administrate_products.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
@@ -45,11 +46,15 @@ class AdminProductsAdapter(private val viewModel: AdminProductsViewModel, privat
         notifyItemRangeInserted(0, itemCount)
     }
 
-    fun deleteItem(position: Int) {
-        if (position in 0..itemCount) {
-            mProductsList.removeAt(position)
-            notifyItemRemoved(position)
-        }
+    @SuppressLint("NotifyDataSetChanged")
+    fun deleteItem(idProduct: Int) {
+//        if (idProduct in 0..itemCount) {
+            val index = mProductsList.indexOfFirst { product -> product.productId == idProduct }
+            if (index != -1) {
+                mProductsList.removeAt(idProduct)
+                notifyDataSetChanged()
+            }
+//        }
     }
 
     class ViewHolder private constructor(private val mBinding: ItemAdminProductBinding, private val viewModel: AdminProductsViewModel): RecyclerView.ViewHolder(mBinding.root) {
@@ -81,6 +86,7 @@ class AdminProductsAdapter(private val viewModel: AdminProductsViewModel, privat
                     btnTakePhoto.setPadding(0, 0, 0, 0)
                     btnTakePhoto.imageTintList = null
                     Glide.with(itemView.context).load(bytes).centerCrop().into(btnTakePhoto)
+                    viewModel.notifyImageBytesWithIndex(bytes, product.productId)
                 }
 
                 btnTakePhoto.setOnClickListener {
@@ -99,7 +105,7 @@ class AdminProductsAdapter(private val viewModel: AdminProductsViewModel, privat
                                     btnTakePhoto.background = AppCompatResources.getDrawable(itemView.context, R.drawable.bg_photo_taker_red)
                                     Glide.with(itemView.context).load(R.drawable.ic_add_a_photo).into(btnTakePhoto)
                                 }
-                                viewModel.notifyImageBytesWithIndex(byteArray, adapterPosition)
+                                viewModel.notifyImageBytesWithIndex(byteArray, product.productId)
                             }
                         })
                     }
@@ -112,7 +118,7 @@ class AdminProductsAdapter(private val viewModel: AdminProductsViewModel, privat
                     product.productPrice = etPrice.text().toDouble()
                     product.isVisible = switchIsVisible.isChecked
                     product.idCategoria = (spinnerCategory.selectedItem as Categoria).idCategory
-                    val imageBytes = viewModel.getImageBytesByPosition(adapterPosition)
+                    val imageBytes = viewModel.getImageBytesByProductId(product.productId)
                     if (imageBytes != null)
                         product.productImage = Blob.fromBytes(imageBytes)
                     callback.update(product)

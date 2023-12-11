@@ -33,7 +33,7 @@ class AdminProductFragment(private val idCategory: Int, private val mViewModel: 
             }
 
             override fun delete(product: Productos, position: Int) {
-                viewModel.deleteProduct(product, position)
+                viewModel.deleteProduct(product)
             }
         })
 
