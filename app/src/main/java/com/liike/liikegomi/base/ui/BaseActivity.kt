@@ -1,17 +1,23 @@
 package com.liike.liikegomi.base.ui
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.navigation.NavigationView
 import com.liike.liikegomi.R
@@ -34,6 +40,8 @@ import com.liike.liikegomi.payment.ui.PaymentActivity
 import com.liike.liikegomi.register.ui.RegisterActivity
 import com.liike.liikegomi.select_edit_address.ui.SelectEditAddressActivity
 import com.liike.liikegomi.shopping_cart.ui.ShoppingCartActivity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
 abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatActivity() {
@@ -119,7 +127,46 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : AppCompatAct
             mIsCartEmpty = isEmpty
             invalidateOptionsMenu()
         }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED
+        ) {
+            val permissions = mutableListOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                permissions.add(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+            requestPermissions(permissions.toTypedArray(), 0x111)
+        } else {
+            MessageUtils.dialog(
+                context = this,
+                title = "Advertencia",
+                message = "Todos los permisos son necesarios, abre tus ajustes y habilita todos los permisos",
+                okButton = "Ok",
+                onAction = {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                    finish()
+                }
+            )
+        }
         super.onPostCreate(savedInstanceState)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 0x111) {
+            val allPermissionsAreGranted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
+            if (!allPermissionsAreGranted) {
+                MessageUtils.toast(this, "El permiso es necesario, la app se cerrará en 2 segundos...")
+                lifecycleScope.launch {
+                    delay(2000)
+                    finish()
+                }
+            }
+        }
     }
 
     override fun onResume() {
